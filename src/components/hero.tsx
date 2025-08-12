@@ -9,7 +9,7 @@ export default function Hero() {
       className="relative flex items-center justify-center h-screen"
     >
       <Image
-        src="https://placehold.co/1920x1080.png"
+        src="/images/tuc-1.png"
         alt="Wedding photography"
         data-ai-hint="wedding photography"
         fill

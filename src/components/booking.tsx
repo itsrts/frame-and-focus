@@ -119,7 +119,7 @@ export default function Booking() {
                 </div>
                 <div className="relative hidden md:block">
                     <Image 
-                        src="https://placehold.co/800x1000.png"
+                        src="/images/tuc-3.png"
                         alt="Couple holding hands"
                         data-ai-hint="couple hands"
                         fill

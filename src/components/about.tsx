@@ -8,7 +8,7 @@ export default function About() {
         <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className="relative aspect-[4/5] rounded-lg overflow-hidden shadow-2xl">
             <Image
-              src="https://placehold.co/800x1000.png"
+              src="/images/tuc-2.png"
               alt="Photographer"
               data-ai-hint="photographer portrait"
               fill

@@ -2,12 +2,12 @@ import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 
 const galleryImages = [
-  { src: 'https://placehold.co/800x1200.png', alt: 'A smiling couple at their wedding', hint: 'wedding couple' },
-  { src: 'https://placehold.co/800x600.png', alt: 'A bride looking out a window', hint: 'bride portrait' },
-  { src: 'https://placehold.co/800x1000.png', alt: 'Detailed shot of wedding rings', hint: 'wedding details' },
-  { src: 'https://placehold.co/800x1200.png', alt: 'A couple walking on a beach at sunset', hint: 'couple sunset' },
-  { src: 'https://placehold.co/800x600.png', alt: 'Guests celebrating at a wedding reception', hint: 'wedding reception' },
-  { src: 'https://placehold.co/800x1000.png', alt: 'A groom adjusting his tie', hint: 'groom portrait' },
+  { src: '/images/asd-1.png', alt: 'A smiling couple at their wedding', hint: 'wedding couple' },
+  { src: '/images/asd-2.png', alt: 'A bride looking out a window', hint: 'bride portrait' },
+  { src: '/images/asd-3.png', alt: 'Detailed shot of wedding rings', hint: 'wedding details' },
+  { src: '/images/asd-4.png', alt: 'A couple walking on a beach at sunset', hint: 'couple sunset' },
+  { src: '/images/asd-5.png', alt: 'Guests celebrating at a wedding reception', hint: 'wedding reception' },
+  { src: '/images/asd-6.png', alt: 'A groom adjusting his tie', hint: 'groom portrait' },
 ];
 
 export default function Gallery() {
