@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 
 export default function About() {
   return (
@@ -16,21 +17,18 @@ export default function About() {
             />
           </div>
           <div className="text-center md:text-left">
-            <h2 className="font-headline text-4xl md:text-5xl text-primary">
-              About Me
+            <h2 className="font-headline text-4xl md:text-5xl text-primary leading-tight">
+              The Ulta Camera: Crafting Memories, Celebrations & Personalized Experiences
             </h2>
             <p className="mt-6 text-lg text-muted-foreground font-body leading-relaxed">
-              At Frame & Focus, we believe every couple has a unique story — and
-              we’re here to frame it with creativity, detail, and real
-              emotions.
+              At The Ulta Camera, we don’t just capture moments—we craft experiences. From pre-wedding shoots in Delhi and destination weddings across India, to curated invites, bespoke gift hampers, and elegant wedding accessories, we help couples celebrate love in style. Our team combines creativity, professionalism, and a personal touch to make every wedding unforgettable.
             </p>
-            <p className="mt-4 text-muted-foreground font-body leading-relaxed">
-              With years of experience and a passion for candid storytelling, we
-              capture weddings just the way they’re meant to be remembered —
-              raw, beautiful, and timeless. Our approach is to blend into your
-              day, capturing the genuine smiles, happy tears, and all the
-              unscripted moments in between.
-            </p>
+            <Button asChild size="lg" variant="link" className="mt-6 text-accent px-0 hover:text-accent/80">
+                <a href="#services">
+                    Explore Our Services
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                </a>
+            </Button>
           </div>
         </div>
       </div>
