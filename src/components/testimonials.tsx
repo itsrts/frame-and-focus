@@ -1,11 +1,4 @@
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 import { Star } from 'lucide-react';
 
 const testimonials = [
@@ -42,6 +35,8 @@ function Rating({ count }: { count: number }) {
 }
 
 export default function Testimonials() {
+  const duplicatedTestimonials = [...testimonials, ...testimonials];
+
   return (
     <section id="testimonials" className="py-20 md:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,33 +48,25 @@ export default function Testimonials() {
             Hear from couples and clients who trusted us with their memories.
           </p>
         </div>
-        <Carousel
-          opts={{
-            align: 'start',
-            loop: true,
-          }}
-          className="w-full max-w-4xl mx-auto"
-        >
-          <CarouselContent>
-            {testimonials.map((testimonial, index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/2">
-                <div className="p-1">
-                  <Card className="h-full flex flex-col justify-between">
-                    <CardContent className="p-6 text-center flex flex-col items-center">
-                        <Rating count={testimonial.rating} />
-                        <p className="mt-4 italic text-muted-foreground/90">
-                            "{testimonial.quote}"
-                        </p>
-                        <p className="mt-6 font-bold font-headline text-lg text-accent">- {testimonial.name}</p>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
+        <div className="relative w-full overflow-hidden">
+          <div className="flex w-max animate-marquee hover:pause">
+            {duplicatedTestimonials.map((testimonial, index) => (
+              <div key={index} className="w-[350px] mx-4 flex-shrink-0">
+                <Card className="h-full flex flex-col justify-between">
+                  <CardContent className="p-6 text-center flex flex-col items-center">
+                    <Rating count={testimonial.rating} />
+                    <p className="mt-4 italic text-muted-foreground/90">
+                      "{testimonial.quote}"
+                    </p>
+                    <p className="mt-6 font-bold font-headline text-lg text-accent">- {testimonial.name}</p>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
-          </CarouselContent>
-          <CarouselPrevious className="hidden sm:flex"/>
-          <CarouselNext className="hidden sm:flex"/>
-        </Carousel>
+          </div>
+           <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background to-transparent pointer-events-none"></div>
+          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background to-transparent pointer-events-none"></div>
+        </div>
       </div>
     </section>
   );
