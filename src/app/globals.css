@@ -3,13 +3,17 @@
 @tailwind utilities;
 
 @layer base {
+  html,
+  body {
+    @apply overflow-x-hidden;
+  }
   html {
     @apply scroll-smooth;
   }
   body {
     @apply font-body;
   }
-  
+
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
     width: 12px;
