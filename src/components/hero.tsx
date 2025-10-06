@@ -19,7 +19,7 @@ export default function Hero() {
       />
       <div className="absolute inset-0 bg-black/50" />
       <div className="relative z-10 text-center text-white p-4">
-        <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl drop-shadow-lg">
+        <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl drop-shadow-lg">
           Your One-Stop Destination for Weddings, Pre-Weddings & More in India
         </h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl font-body drop-shadow-md">
