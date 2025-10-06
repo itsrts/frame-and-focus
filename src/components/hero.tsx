@@ -25,7 +25,7 @@ export default function Hero() {
         <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl font-body drop-shadow-md">
           From photography to personalized invites, luxury gift hampers, and wedding accessories, The Ulta Camera turns your wedding dreams into reality.
         </p>
-        <Button asChild size="lg" className="mt-8 bg-primary/80 hover:bg-primary text-primary-foreground">
+        <Button asChild size="lg" className="mt-8 bg-primary/80 hover:bg-primary text-primary-foreground text-lg font-bold">
           <a href="#booking">
             Plan Your Perfect Wedding Today
           </a>

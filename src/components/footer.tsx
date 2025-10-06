@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
             <Camera className="h-6 w-6 text-primary" />
-            <span className="font-headline text-xl font-bold">
+            <span className="font-headline text-2xl font-bold">
               Frame & Focus
             </span>
           </div>
@@ -19,21 +19,21 @@ export default function Footer() {
           <div className="flex gap-4">
             <a
               href="#"
-              className="text-muted-foreground hover:text-primary transition-colors"
+              className="text-muted-foreground hover:text-[#E1306C] transition-colors"
               aria-label="Instagram"
             >
               <Instagram className="h-6 w-6" />
             </a>
             <a
               href="#"
-              className="text-muted-foreground hover:text-primary transition-colors"
+              className="text-muted-foreground hover:text-[#1877F2] transition-colors"
               aria-label="Facebook"
             >
               <Facebook className="h-6 w-6" />
             </a>
             <a
               href="#"
-              className="text-muted-foreground hover:text-primary transition-colors"
+              className="text-muted-foreground hover:text-[#1DA1F2] transition-colors"
               aria-label="Twitter"
             >
               <Twitter className="h-6 w-6" />

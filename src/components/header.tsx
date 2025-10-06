@@ -37,7 +37,7 @@ export default function Header() {
           key={link.href}
           href={link.href}
           className={cn(
-            'text-sm font-bold transition-all hover:text-primary hover:scale-105',
+            'font-bold transition-all hover:text-primary hover:scale-105 text-lg',
             isScrolled ? 'text-foreground' : 'text-white',
             className
           )}
@@ -63,7 +63,7 @@ export default function Header() {
             <Camera className="h-6 w-6 text-primary" />
             <span
               className={cn(
-                'font-headline text-xl font-bold transition-colors',
+                'font-headline text-2xl font-bold transition-colors',
                 isScrolled ? 'text-foreground' : 'text-primary'
               )}
             >
@@ -85,7 +85,7 @@ export default function Header() {
                 <div className="flex flex-col gap-6 p-6">
                   <a href="#" className="flex items-center gap-2 mb-4">
                     <Camera className="h-6 w-6 text-primary" />
-                    <span className="font-headline text-xl font-bold">
+                    <span className="font-headline text-2xl font-bold">
                       Frame & Focus
                     </span>
                   </a>
