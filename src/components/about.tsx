@@ -13,7 +13,7 @@ export default function About() {
             className="relative aspect-[4/5] rounded-lg overflow-hidden shadow-2xl"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
+            viewport={{ amount: 0.5 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
             <Image
@@ -28,7 +28,7 @@ export default function About() {
             className="text-center md:text-left"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
+            viewport={{ amount: 0.5 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
             <h2 className="font-headline text-4xl md:text-5xl text-primary leading-tight">
