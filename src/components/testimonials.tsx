@@ -10,6 +10,16 @@ import { Star } from 'lucide-react';
 
 const testimonials = [
   {
+    quote: "From our pre-wedding shoot to the invites and gift hampers, The Ulta Camera made everything perfect. Truly a one-stop solution!",
+    name: 'Preksha & Ritik',
+    rating: 5,
+  },
+  {
+    quote: "The wedding accessories and personalized gifts impressed every guest. Photography was stunning too!",
+    name: 'Ananya & Rohan',
+    rating: 5,
+  },
+  {
     quote: "Absolutely breathtaking photos! They captured our day perfectly. We couldn't be happier with the results and the experience.",
     name: 'Emily & James',
     rating: 5,
@@ -17,16 +27,6 @@ const testimonials = [
   {
     quote: "The team was so professional and made us feel comfortable throughout the entire process. The photos are a treasure we'll cherish forever.",
     name: 'Sarah L.',
-    rating: 5,
-  },
-  {
-    quote: 'Incredible attention to detail and a truly artistic eye. The photos from our event were beyond our expectations. Highly recommend!',
-    name: 'Michael B.',
-    rating: 5,
-  },
-  {
-    quote: 'Our family portraits are stunning! They managed to capture the personalities of our kids so well. A wonderful experience from start to finish.',
-    name: 'The Johnson Family',
     rating: 5,
   },
 ];
@@ -47,7 +47,7 @@ export default function Testimonials() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-headline text-4xl md:text-5xl text-primary">
-            Client Stories
+            Couples and Guests Love Us
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
             Hear from couples and clients who trusted us with their memories.
@@ -62,7 +62,7 @@ export default function Testimonials() {
         >
           <CarouselContent>
             {testimonials.map((testimonial, index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/2">
                 <div className="p-1">
                   <Card className="h-full flex flex-col justify-between">
                     <CardContent className="p-6 text-center flex flex-col items-center">
