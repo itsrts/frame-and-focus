@@ -1,4 +1,6 @@
+'use client';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 const galleryImages = [
   { src: '/images/asd-1.png', alt: 'Luxury wedding photography Delhi', hint: 'luxury wedding' },
@@ -21,9 +23,26 @@ export default function Gallery() {
             A glimpse into the stories we've had the honor of capturing.
           </p>
         </div>
-        <div className="columns-1 sm:columns-2 md:columns-3 gap-4 lg:gap-6">
+        <motion.div
+          className="columns-1 sm:columns-2 md:columns-3 gap-4 lg:gap-6"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, staggerChildren: 0.2 }}
+        >
           {galleryImages.map((image, index) => (
-            <div key={index} className="mb-4 lg:mb-6 break-inside-avoid">
+            <motion.div
+              key={index}
+              className="mb-4 lg:mb-6 break-inside-avoid"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
               <div className="relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
                  <Image
                   src={image.src}
@@ -34,9 +53,9 @@ export default function Gallery() {
                   className="w-full h-auto object-cover"
                 />
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

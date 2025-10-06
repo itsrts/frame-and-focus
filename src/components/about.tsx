@@ -1,13 +1,21 @@
+'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function About() {
   return (
     <section id="about" className="py-20 md:py-32 bg-secondary">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="relative aspect-[4/5] rounded-lg overflow-hidden shadow-2xl">
+          <motion.div
+            className="relative aspect-[4/5] rounded-lg overflow-hidden shadow-2xl"
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+          >
             <Image
               src="/images/tuc-2.png"
               alt="Photographer"
@@ -15,8 +23,14 @@ export default function About() {
               fill
               className="object-cover"
             />
-          </div>
-          <div className="text-center md:text-left">
+          </motion.div>
+          <motion.div
+            className="text-center md:text-left"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+          >
             <h2 className="font-headline text-4xl md:text-5xl text-primary leading-tight">
               The Ulta Camera: Crafting Memories, Celebrations & Personalized Experiences
             </h2>
@@ -29,7 +43,7 @@ export default function About() {
                     <ArrowRight className="ml-2 h-5 w-5" />
                 </a>
             </Button>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
