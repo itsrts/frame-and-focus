@@ -1,52 +1,99 @@
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Camera, Users, PartyPopper } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Camera, Mail, Gift, Gem, Users } from 'lucide-react';
 
 const services = [
   {
     icon: <Camera className="h-10 w-10 text-accent" />,
-    title: 'Wedding Coverage',
-    description: 'Full-day coverage to capture every moment of your special day, from getting ready to the final dance.',
-    price: 'Starting at $2,500',
+    title: 'Wedding & Pre-Wedding Photography',
+    description: 'Capture your love story with authentic, candid, and timeless photography.',
+    features: [
+      'Wedding Photography: Full-day coverage for your wedding celebrations. Expertise in candid, luxury, and destination weddings.',
+      'Pre-Wedding Shoots: Personalized sessions in Delhi, Jaipur, or any destination of your choice.',
+      'Event Photography: Corporate or private events captured with precision and style.'
+    ],
+    cta: 'Book Your Photographer',
+  },
+  {
+    icon: <Mail className="h-10 w-10 text-accent" />,
+    title: 'Wedding Invitations',
+    description: 'Set the perfect first impression with elegant and customized wedding invites.',
+    features: [
+      'Printed Invitations: Luxurious, tailored designs.',
+      'Digital Invitations: Shareable, modern, and eco-friendly options.',
+      'Custom Themes: Match your wedding vibe perfectly.'
+    ],
+    cta: 'Design Your Invitation',
+  },
+  {
+    icon: <Gift className="h-10 w-10 text-accent" />,
+    title: 'Gift Hampers',
+    description: 'Delight your guests with thoughtfully curated wedding hampers.',
+    features: [
+      'Personalized Hampers: Include treats, keepsakes, and essentials for guests.',
+      'Luxury Hampers: Perfect for VIP guests or destination wedding stays.',
+      'Eco-Friendly Options: Sustainable and stylish gifting solutions.'
+    ],
+    cta: 'Order Your Gift Hampers',
+  },
+  {
+    icon: <Gem className="h-10 w-10 text-accent" />,
+    title: 'Wedding Accessories',
+    description: 'Add elegance and charm to your wedding celebrations.',
+    features: [
+      'Decor Items: Personalized signage, table settings, and thematic décor.',
+      'Bridal Accessories: Jewelry, props, and style elements for pre-wedding shoots and ceremonies.',
+      'Event Essentials: Coordinated accessories to enhance every function.'
+    ],
+    cta: 'Shop Wedding Accessories',
   },
   {
     icon: <Users className="h-10 w-10 text-accent" />,
-    title: 'Portrait Sessions',
-    description: 'Engagement, family, or individual portraits. Tailored sessions to capture your personality and story.',
-    price: 'Starting at $450',
-  },
-  {
-    icon: <PartyPopper className="h-10 w-10 text-accent" />,
-    title: 'Event Photography',
-    description: 'Professional photography for corporate events, parties, and other special occasions.',
-    price: 'Contact for quote',
-  },
+    title: 'Full Wedding Planning & Coordination',
+    description: 'We handle every detail so you can enjoy the celebration.',
+    features: [
+      'One-Day Wedding Planner: Complete coordination for a stress-free wedding day.',
+      'Vendor Management: Access trusted photographers, decorators, and entertainers.',
+      'Destination Weddings: Plan, organize, and execute weddings anywhere in India.'
+    ],
+    cta: 'Plan Your Wedding With Us',
+  }
 ];
 
 export default function Services() {
   return (
     <section id="services" className="py-20 md:py-32 bg-secondary">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+        <div className="text-center mb-16">
           <h2 className="font-headline text-4xl md:text-5xl text-primary">
-            Our Services
+            Complete Wedding Solutions Under One Roof
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            We offer a range of photography services to meet your needs.
-          </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="text-center bg-background/70 hover:shadow-xl transition-shadow duration-300">
+            <Card key={index} className="flex flex-col text-center bg-background/70 hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
                 <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit mb-4">
                   {service.icon}
                 </div>
                 <CardTitle className="font-headline text-2xl">{service.title}</CardTitle>
+                <CardDescription className="text-base text-muted-foreground/90 pt-2">{service.description}</CardDescription>
               </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base text-muted-foreground/90 mb-4">{service.description}</CardDescription>
-                <p className="text-lg font-semibold text-accent">{service.price}</p>
+              <CardContent className="flex-grow">
+                <ul className="text-left space-y-2 text-muted-foreground">
+                  {service.features.map((feature, i) => (
+                    <li key={i} className="flex items-start">
+                      <span className="text-accent mr-2 mt-1">✓</span>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
               </CardContent>
+              <CardFooter>
+                 <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                    <a href="#booking">{service.cta}</a>
+                </Button>
+              </CardFooter>
             </Card>
           ))}
         </div>
