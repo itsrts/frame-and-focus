@@ -23,7 +23,7 @@ export default function About() {
             <p className="mt-6 text-lg text-muted-foreground font-body leading-relaxed">
               At The Ulta Camera, we don’t just capture moments—we craft experiences. From pre-wedding shoots in Delhi and destination weddings across India, to curated invites, bespoke gift hampers, and elegant wedding accessories, we help couples celebrate love in style. Our team combines creativity, professionalism, and a personal touch to make every wedding unforgettable.
             </p>
-            <Button asChild size="lg" variant="link" className="mt-6 text-accent px-0 hover:text-accent/80">
+            <Button asChild size="lg" variant="link" className="mt-6 text-accent px-0 hover:text-accent/80 text-lg">
                 <a href="#services">
                     Explore Our Services
                     <ArrowRight className="ml-2 h-5 w-5" />
