@@ -27,7 +27,7 @@ export default function Gallery() {
           className="columns-1 sm:columns-2 md:columns-3 gap-4 lg:gap-6"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.8, staggerChildren: 0.2 }}
         >
           {galleryImages.map((image, index) => (
@@ -40,7 +40,7 @@ export default function Gallery() {
               }}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <div className="relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
