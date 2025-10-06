@@ -4,8 +4,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'Frame & Focus',
-  description: 'Portfolio for a designer photographer.',
+  title: 'The Ulta Camera – Wedding Photography, Pre-Wedding Shoots, Invites & More in India',
+  description: 'The Ulta Camera is your one-stop wedding solution in Delhi & across India. Capture stunning moments with expert wedding photography, design bespoke invites, create luxury gift hampers, and choose elegant wedding accessories. Book now!',
 };
 
 export default function RootLayout({
