@@ -60,11 +60,16 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <a href="#" className="flex items-center gap-2">
-            <Camera className="h-6 w-6 text-primary" />
+            <Camera
+              className={cn(
+                'h-6 w-6 transition-colors',
+                isScrolled ? 'text-primary' : 'text-white'
+              )}
+            />
             <span
               className={cn(
                 'font-headline text-2xl font-bold transition-colors',
-                isScrolled ? 'text-foreground' : 'text-primary'
+                isScrolled ? 'text-primary' : 'text-white'
               )}
             >
               Frame & Focus

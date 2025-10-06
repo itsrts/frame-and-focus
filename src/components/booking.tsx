@@ -119,7 +119,7 @@ export default function Booking() {
                                 </FormItem>
                             )}
                             />
-                            <Button type="submit" size="lg" className="w-full">
+                            <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-white">
                                 Send Inquiry
                             </Button>
                         </form>
