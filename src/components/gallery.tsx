@@ -1,12 +1,11 @@
 import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
 
 const galleryImages = [
-  { src: '/images/asd-1.png', alt: 'A smiling couple at their wedding', hint: 'wedding couple' },
-  { src: '/images/asd-2.png', alt: 'A bride looking out a window', hint: 'bride portrait' },
-  { src: '/images/asd-3.png', alt: 'Detailed shot of wedding rings', hint: 'wedding details' },
-  { src: '/images/asd-4.png', alt: 'A couple walking on a beach at sunset', hint: 'couple sunset' },
-  { src: '/images/asd-5.png', alt: 'Guests celebrating at a wedding reception', hint: 'wedding reception' },
+  { src: '/images/asd-1.png', alt: 'Luxury wedding photography Delhi', hint: 'luxury wedding' },
+  { src: '/images/asd-2.png', alt: 'Pre-wedding shoot Jaipur palace', hint: 'pre-wedding Jaipur' },
+  { src: '/images/asd-3.png', alt: 'Customized wedding invitation design', hint: 'wedding invitation' },
+  { src: '/images/asd-4.png', alt: 'Elegant wedding gift hamper for guests', hint: 'wedding gift' },
+  { src: '/images/asd-5.png', alt: 'Wedding décor and accessories setup', hint: 'wedding decor' },
   { src: '/images/asd-6.png', alt: 'A groom adjusting his tie', hint: 'groom portrait' },
 ];
 
@@ -16,7 +15,7 @@ export default function Gallery() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-headline text-4xl md:text-5xl text-primary">
-            Gallery Showcase
+            Captured Moments & Styled Celebrations
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
             A glimpse into the stories we've had the honor of capturing.
