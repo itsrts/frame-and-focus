@@ -49,7 +49,7 @@ export default function Testimonials() {
           </p>
         </div>
         <div className="relative w-full overflow-hidden">
-          <div className="flex w-max animate-marquee hover:pause">
+          <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
             {duplicatedTestimonials.map((testimonial, index) => (
               <div key={index} className="w-[350px] mx-4 flex-shrink-0">
                 <Card className="h-full flex flex-col justify-between">
