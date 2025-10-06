@@ -1,6 +1,9 @@
+'use client';
+
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Camera, Mail, Gift, Gem, Users } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const services = [
   {
@@ -64,37 +67,51 @@ export default function Services() {
   return (
     <section id="services" className="py-20 md:py-32 bg-secondary">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
           <h2 className="font-headline text-4xl md:text-5xl text-primary">
             Complete Wedding Solutions Under One Roof
           </h2>
-        </div>
+        </motion.div>
         <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="flex flex-col text-center bg-background/70 hover:shadow-xl transition-shadow duration-300">
-              <CardHeader>
-                <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit mb-4">
-                  {service.icon}
-                </div>
-                <CardTitle className="font-headline text-2xl">{service.title}</CardTitle>
-                <CardDescription className="text-base text-muted-foreground/90 pt-2">{service.description}</CardDescription>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <ul className="text-left space-y-2 text-muted-foreground">
-                  {service.features.map((feature, i) => (
-                    <li key={i} className="flex items-start">
-                      <span className="text-accent mr-2 mt-1">✓</span>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-              <CardFooter>
-                 <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                    <a href="#booking">{service.cta}</a>
-                </Button>
-              </CardFooter>
-            </Card>
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <Card className="flex flex-col text-center bg-background/70 hover:shadow-xl transition-shadow duration-300 h-full">
+                <CardHeader>
+                  <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit mb-4">
+                    {service.icon}
+                  </div>
+                  <CardTitle className="font-headline text-2xl">{service.title}</CardTitle>
+                  <CardDescription className="text-base text-muted-foreground/90 pt-2">{service.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <ul className="text-left space-y-2 text-muted-foreground">
+                    {service.features.map((feature, i) => (
+                      <li key={i} className="flex items-start">
+                        <span className="text-accent mr-2 mt-1">✓</span>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                   <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                      <a href="#booking">{service.cta}</a>
+                  </Button>
+                </CardFooter>
+              </Card>
+            </motion.div>
           ))}
         </div>
       </div>

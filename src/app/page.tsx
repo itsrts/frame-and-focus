@@ -9,7 +9,6 @@ import Services from '@/components/services';
 import Testimonials from '@/components/testimonials';
 import Booking from '@/components/booking';
 import Footer from '@/components/footer';
-import ReviewAssistant from '@/components/review-assistant';
 import Loader from '@/components/loader';
 
 export default function Home() {
@@ -36,7 +35,6 @@ export default function Home() {
           <Gallery />
           <Services />
           <Testimonials />
-          <ReviewAssistant />
           <Booking />
         </main>
         <Footer />

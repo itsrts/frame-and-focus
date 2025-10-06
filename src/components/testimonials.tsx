@@ -1,5 +1,7 @@
+'use client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const testimonials = [
   {
@@ -38,7 +40,14 @@ export default function Testimonials() {
   const duplicatedTestimonials = [...testimonials, ...testimonials];
 
   return (
-    <section id="testimonials" className="py-20 md:py-32">
+    <motion.section 
+      id="testimonials" 
+      className="py-20 md:py-32"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8 }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-headline text-4xl md:text-5xl text-primary">
@@ -68,6 +77,6 @@ export default function Testimonials() {
           <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background to-transparent pointer-events-none"></div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

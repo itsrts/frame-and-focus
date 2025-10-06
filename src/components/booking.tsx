@@ -17,6 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 const bookingFormSchema = z.object({
   name: z.string().min(2, {
@@ -53,7 +54,14 @@ export default function Booking() {
   }
 
   return (
-    <section id="booking" className="py-20 md:py-32 bg-secondary">
+    <motion.section 
+      id="booking" 
+      className="py-20 md:py-32 bg-secondary"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8 }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-headline text-4xl md:text-5xl text-primary">
@@ -129,6 +137,6 @@ export default function Booking() {
             </div>
         </Card>
       </div>
-    </section>
+    </motion.section>
   );
 }
