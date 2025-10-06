@@ -37,7 +37,8 @@ export default function Header() {
           key={link.href}
           href={link.href}
           className={cn(
-            'text-sm font-medium transition-colors hover:text-primary',
+            'text-sm font-medium transition-all hover:text-primary hover:scale-105',
+            isScrolled ? 'text-foreground' : 'text-white',
             className
           )}
         >
@@ -60,7 +61,12 @@ export default function Header() {
         <div className="flex items-center justify-between h-20">
           <a href="#" className="flex items-center gap-2">
             <Camera className="h-6 w-6 text-primary" />
-            <span className="font-headline text-xl font-bold">
+            <span
+              className={cn(
+                'font-headline text-xl font-bold transition-colors',
+                isScrolled ? 'text-foreground' : 'text-primary'
+              )}
+            >
               Frame & Focus
             </span>
           </a>
