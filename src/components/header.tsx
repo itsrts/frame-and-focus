@@ -37,7 +37,7 @@ export default function Header() {
           key={link.href}
           href={link.href}
           className={cn(
-            'text-sm font-medium transition-all hover:text-primary hover:scale-105',
+            'text-sm font-bold transition-all hover:text-primary hover:scale-105',
             isScrolled ? 'text-foreground' : 'text-white',
             className
           )}
@@ -94,7 +94,7 @@ export default function Header() {
                       <SheetClose asChild key={link.href}>
                         <a
                           href={link.href}
-                          className="text-lg font-medium transition-colors hover:text-primary"
+                          className="text-lg font-bold transition-colors hover:text-primary"
                         >
                           {link.label}
                         </a>
