@@ -37,8 +37,8 @@ export default function Header() {
           key={link.href}
           href={link.href}
           className={cn(
-            'font-bold transition-all text-lg',
-            isScrolled 
+            'font-bold transition-all text-base md:text-lg',
+            isScrolled
               ? 'text-primary hover:scale-105'
               : 'text-white hover:text-primary hover:scale-105',
             className
@@ -60,7 +60,7 @@ export default function Header() {
       )}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16 md:h-20">
           <a href="#" className="flex items-center gap-2">
             <Camera
               className={cn(
@@ -70,7 +70,7 @@ export default function Header() {
             />
             <span
               className={cn(
-                'font-headline text-2xl font-bold transition-colors',
+                'font-headline text-xl md:text-2xl font-bold transition-colors',
                 isScrolled ? 'text-primary' : 'text-white'
               )}
             >
@@ -83,7 +83,7 @@ export default function Header() {
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className={cn(isScrolled ? 'text-primary' : 'text-white')}>
                   <Menu className="h-6 w-6" />
                   <span className="sr-only">Open menu</span>
                 </Button>

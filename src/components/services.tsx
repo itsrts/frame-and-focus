@@ -65,26 +65,26 @@ const services = [
 
 export default function Services() {
   return (
-    <section id="services" className="py-20 md:py-32 bg-secondary">
+    <section id="services" className="py-16 md:py-32 bg-secondary">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
-          className="text-center mb-16"
+          className="text-center mb-12 md:mb-16"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ amount: 0.5 }}
+          viewport={{ once: false, amount: 0.5 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="font-headline text-4xl md:text-5xl text-primary">
+          <h2 className="font-headline text-3xl md:text-5xl text-primary">
             Complete Wedding Solutions Under One Roof
           </h2>
         </motion.div>
-        <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ amount: 0.5 }}
+              viewport={{ once: false, amount: 0.5 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Card className="flex flex-col text-center bg-background/70 hover:shadow-xl transition-shadow duration-300 h-full">
@@ -96,10 +96,10 @@ export default function Services() {
                   <CardDescription className="text-base text-muted-foreground/90 pt-2">{service.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow">
-                  <ul className="text-left space-y-2 text-muted-foreground">
+                  <ul className="text-left space-y-2 text-muted-foreground text-sm">
                     {service.features.map((feature, i) => (
                       <li key={i} className="flex items-start">
-                        <span className="text-accent mr-2 mt-1">✓</span>
+                        <span className="text-accent mr-2 mt-1 flex-shrink-0">✓</span>
                         <span>{feature}</span>
                       </li>
                     ))}

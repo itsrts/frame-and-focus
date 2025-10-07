@@ -42,39 +42,39 @@ export default function Testimonials() {
   return (
     <motion.section 
       id="testimonials" 
-      className="py-20 md:py-32"
+      className="py-16 md:py-32"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ amount: 0.5 }}
+      viewport={{ once: false, amount: 0.5 }}
       transition={{ duration: 0.8 }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="font-headline text-4xl md:text-5xl text-primary">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="font-headline text-3xl md:text-5xl text-primary">
             Couples and Guests Love Us
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+          <p className="mt-4 max-w-2xl mx-auto text-base md:text-lg text-muted-foreground">
             Hear from couples and clients who trusted us with their memories.
           </p>
         </div>
         <div className="relative w-full overflow-hidden">
-          <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
+          <motion.div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
             {duplicatedTestimonials.map((testimonial, index) => (
-              <div key={index} className="w-[350px] mx-4 flex-shrink-0">
+              <div key={index} className="w-[300px] md:w-[350px] mx-4 flex-shrink-0">
                 <Card className="h-full flex flex-col justify-between">
                   <CardContent className="p-6 text-center flex flex-col items-center">
                     <Rating count={testimonial.rating} />
-                    <p className="mt-4 italic text-muted-foreground/90">
+                    <p className="mt-4 italic text-muted-foreground/90 text-sm">
                       "{testimonial.quote}"
                     </p>
-                    <p className="mt-6 font-bold font-headline text-lg text-accent">- {testimonial.name}</p>
+                    <p className="mt-6 font-bold font-headline text-base md:text-lg text-accent">- {testimonial.name}</p>
                   </CardContent>
                 </Card>
               </div>
             ))}
-          </div>
-           <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background to-transparent pointer-events-none"></div>
-          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background to-transparent pointer-events-none"></div>
+          </motion.div>
+           <div className="absolute inset-y-0 left-0 w-12 md:w-24 bg-gradient-to-r from-background to-transparent pointer-events-none"></div>
+          <div className="absolute inset-y-0 right-0 w-12 md:w-24 bg-gradient-to-l from-background to-transparent pointer-events-none"></div>
         </div>
       </div>
     </motion.section>

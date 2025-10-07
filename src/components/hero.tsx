@@ -28,7 +28,7 @@ export default function Hero() {
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       >
         <motion.h1
-          className="font-headline text-5xl md:text-6xl lg:text-7xl drop-shadow-lg"
+          className="font-headline text-4xl md:text-6xl lg:text-7xl drop-shadow-lg"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -48,7 +48,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-        <Button asChild size="lg" className="mt-8 bg-primary/80 hover:bg-primary text-primary-foreground text-xl font-bold">
+        <Button asChild size="lg" className="mt-8 bg-primary/80 hover:bg-primary text-primary-foreground text-lg md:text-xl font-bold">
           <a href="#booking">
             Plan Your Perfect Wedding Today
           </a>

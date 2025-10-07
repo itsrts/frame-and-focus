@@ -56,26 +56,26 @@ export default function Booking() {
   return (
     <motion.section 
       id="booking" 
-      className="py-20 md:py-32 bg-secondary"
+      className="py-16 md:py-32 bg-secondary"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ amount: 0.5 }}
+      viewport={{ once: false, amount: 0.5 }}
       transition={{ duration: 0.8 }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="font-headline text-4xl md:text-5xl text-primary">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="font-headline text-3xl md:text-5xl text-primary">
             Book Your Session
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+          <p className="mt-4 max-w-2xl mx-auto text-base md:text-lg text-muted-foreground">
             Ready to tell your story? Fill out the form below to get in touch.
           </p>
         </div>
         <Card className="max-w-4xl mx-auto overflow-hidden shadow-lg">
             <div className="grid md:grid-cols-2">
-                <div className="p-8 md:p-10">
+                <div className="p-6 md:p-10">
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
                             <FormField
                             control={form.control}
                             name="name"
