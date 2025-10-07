@@ -6,8 +6,8 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-background border-t">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <footer className="bg-background border-t py-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center">
             <Logo scrolled className="w-[12rem] h-auto" />
