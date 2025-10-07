@@ -66,7 +66,7 @@ export default function Header() {
             <Logo
               className={cn(
                 'transition-all w-48',
-                isScrolled ? 'text-primary' : 'text-white'
+                isScrolled ? '' : ''
               )}
             />
           </a>
