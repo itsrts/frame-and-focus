@@ -10,7 +10,7 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
+import Logo from './logo';
 
 const NAV_LINKS = [
   { href: '#about', label: 'About' },
@@ -63,12 +63,11 @@ export default function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <a href="#" className="flex items-center">
-            <Image
-              src="/images/the-ultra-camera.png"
-              alt="The Ulta Camera Logo"
-              width={200}
-              height={50}
-              className={cn('object-contain transition-all', isScrolled ? 'w-40' : 'w-48')}
+            <Logo
+              className={cn(
+                'transition-all w-48',
+                isScrolled ? 'text-primary' : 'text-white'
+              )}
             />
           </a>
           <nav className="hidden md:flex items-center gap-6">
@@ -77,7 +76,11 @@ export default function Header() {
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className={cn(isScrolled ? 'text-primary' : 'text-white')}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(isScrolled ? 'text-primary' : 'text-white')}
+                >
                   <Menu className="h-6 w-6" />
                   <span className="sr-only">Open menu</span>
                 </Button>
@@ -85,13 +88,7 @@ export default function Header() {
               <SheetContent side="right">
                 <div className="flex flex-col gap-6 p-6">
                   <a href="#" className="flex items-center gap-2 mb-4">
-                     <Image
-                        src="/images/the-ultra-camera.png"
-                        alt="The Ulta Camera Logo"
-                        width={200}
-                        height={50}
-                        className="object-contain w-48"
-                      />
+                    <Logo className="w-48 text-primary" />
                   </a>
                   <nav className="flex flex-col gap-4">
                     {NAV_LINKS.map((link) => (

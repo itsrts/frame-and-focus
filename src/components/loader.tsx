@@ -1,6 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
+import Logo from './logo';
 
 const Loader = () => {
   return (
@@ -26,13 +26,7 @@ const Loader = () => {
           delay: 0.2,
         }}
       >
-        <Image
-          src="/images/the-ultra-camera.png"
-          alt="The Ulta Camera Logo"
-          width={250}
-          height={60}
-          className="object-contain"
-        />
+        <Logo className="w-[250px] text-primary" />
       </motion.div>
     </motion.div>
   );
