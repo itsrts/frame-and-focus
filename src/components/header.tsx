@@ -88,7 +88,7 @@ export default function Header() {
               <SheetContent side="right">
                 <div className="flex flex-col gap-6 p-6">
                   <a href="#" className="flex items-center gap-2 mb-4">
-                    <Logo className="w-48 text-primary" />
+                    <Logo className="w-48" />
                   </a>
                   <nav className="flex flex-col gap-4">
                     {NAV_LINKS.map((link) => (
