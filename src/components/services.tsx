@@ -71,7 +71,7 @@ export default function Services() {
           className="text-center mb-12 md:mb-16"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.5 }}
+          viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.8 }}
         >
           <h2 className="font-headline text-3xl md:text-5xl text-primary">
@@ -84,7 +84,7 @@ export default function Services() {
               key={index}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.5 }}
+              viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Card className="flex flex-col text-center bg-background/70 hover:shadow-xl transition-shadow duration-300 h-full">
