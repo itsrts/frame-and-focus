@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center">
-            <Logo className="w-[22rem]" />
+            <Logo className="w-[12rem]" />
           </div>
           <p className="text-xs md:text-sm text-muted-foreground order-last md:order-none">
             &copy; {currentYear} The Ulta Camera. All rights reserved.
