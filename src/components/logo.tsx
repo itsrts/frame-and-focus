@@ -8,7 +8,7 @@ export default function Logo({ className, scrolled, ...props }: { className?: st
       alt="The Ulta Camera Logo"
       width={200}
       height={50}
-      style={{ filter: scrolled ? 'invert(0)' : 'invert(1)' }}
+      style={{ filter: scrolled ? 'invert(1)' : 'invert(0)' }}
       className={cn('h-auto', className)}
       {...props}
     />

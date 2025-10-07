@@ -66,8 +66,7 @@ export default function Header() {
             <Logo
               scrolled={isScrolled}
               className={cn(
-                'transition-all w-[12rem]',
-                isScrolled ? '' : ''
+                'transition-all w-[10rem] md:w-[12rem]'
               )}
             />
           </a>
