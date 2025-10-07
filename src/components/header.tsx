@@ -40,7 +40,7 @@ export default function Header() {
           className={cn(
             'font-bold transition-all text-base md:text-lg',
             isScrolled
-              ? 'text-primary hover:scale-105'
+              ? 'text-primary hover:text-primary'
               : 'text-white hover:text-primary hover:scale-105',
             className
           )}
@@ -65,7 +65,7 @@ export default function Header() {
           <a href="#" className="flex items-center">
             <Logo
               className={cn(
-                'transition-all w-48',
+                'transition-all w-[22rem]',
                 isScrolled ? '' : ''
               )}
             />
@@ -88,7 +88,7 @@ export default function Header() {
               <SheetContent side="right">
                 <div className="flex flex-col gap-6 p-6">
                   <a href="#" className="flex items-center gap-2 mb-4">
-                    <Logo className="w-48" />
+                    <Logo className="w-[22rem]" />
                   </a>
                   <nav className="flex flex-col gap-4">
                     {NAV_LINKS.map((link) => (

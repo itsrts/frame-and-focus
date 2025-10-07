@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 export default function Logo({ className, ...props }: { className?: string }) {
   return (
     <Image
-      src="/images/logo.png"
+      src="/images/the-ultra-camera.png"
       alt="The Ulta Camera Logo"
       width={200}
       height={50}
