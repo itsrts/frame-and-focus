@@ -1,6 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
-import { Camera } from 'lucide-react';
+import Image from 'next/image';
 
 const Loader = () => {
   return (
@@ -25,12 +25,14 @@ const Loader = () => {
           damping: 20,
           delay: 0.2,
         }}
-        className="flex items-center gap-3"
       >
-        <Camera className="h-12 w-12 text-primary" />
-        <span className="font-headline text-4xl font-bold text-primary">
-          Frame & Focus
-        </span>
+        <Image
+          src="/images/the-ultra-camera.png"
+          alt="The Ulta Camera Logo"
+          width={250}
+          height={60}
+          className="object-contain"
+        />
       </motion.div>
     </motion.div>
   );

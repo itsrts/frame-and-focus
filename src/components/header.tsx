@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Menu, Camera } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -10,6 +10,7 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 const NAV_LINKS = [
   { href: '#about', label: 'About' },
@@ -61,21 +62,14 @@ export default function Header() {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <a href="#" className="flex items-center gap-2">
-            <Camera
-              className={cn(
-                'h-6 w-6 transition-colors',
-                isScrolled ? 'text-primary' : 'text-white'
-              )}
+          <a href="#" className="flex items-center">
+            <Image
+              src="/images/the-ultra-camera.png"
+              alt="The Ulta Camera Logo"
+              width={200}
+              height={50}
+              className={cn('object-contain transition-all', isScrolled ? 'w-40' : 'w-48')}
             />
-            <span
-              className={cn(
-                'font-headline text-xl md:text-2xl font-bold transition-colors',
-                isScrolled ? 'text-primary' : 'text-white'
-              )}
-            >
-              Frame & Focus
-            </span>
           </a>
           <nav className="hidden md:flex items-center gap-6">
             <NavLinks />
@@ -91,10 +85,13 @@ export default function Header() {
               <SheetContent side="right">
                 <div className="flex flex-col gap-6 p-6">
                   <a href="#" className="flex items-center gap-2 mb-4">
-                    <Camera className="h-6 w-6 text-primary" />
-                    <span className="font-headline text-2xl font-bold text-primary">
-                      Frame & Focus
-                    </span>
+                     <Image
+                        src="/images/the-ultra-camera.png"
+                        alt="The Ulta Camera Logo"
+                        width={200}
+                        height={50}
+                        className="object-contain w-48"
+                      />
                   </a>
                   <nav className="flex flex-col gap-4">
                     {NAV_LINKS.map((link) => (
