@@ -4,11 +4,11 @@ import { cn } from '@/lib/utils';
 export default function Logo({ className, scrolled, ...props }: { className?: string, scrolled?: boolean }) {
   return (
     <Image
-      src="/images/the-ultra-camera.png"
+      src="/images/logo-image.png"
       alt="The Ulta Camera Logo"
       width={200}
       height={50}
-      style={{ filter: scrolled ? 'invert(1)' : 'invert(0)' }}
+      style={{ filter: scrolled ? 'invert(0)' : 'invert(1)' }}
       className={cn('h-auto', className)}
       {...props}
     />

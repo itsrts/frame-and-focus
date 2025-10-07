@@ -66,7 +66,7 @@ export default function Header() {
             <Logo
               scrolled={isScrolled}
               className={cn(
-                'transition-all w-[10rem] md:w-[12rem]'
+                'transition-all w-[12rem] md:w-[15rem]'
               )}
             />
           </a>
@@ -88,7 +88,7 @@ export default function Header() {
               <SheetContent side="right">
                 <div className="flex flex-col gap-6 p-6">
                   <a href="#" className="flex items-center gap-2 mb-4">
-                    <Logo scrolled className="w-[12rem]" />
+                    <Logo scrolled className="w-32" />
                   </a>
                   <nav className="flex flex-col gap-4">
                     {NAV_LINKS.map((link) => (
