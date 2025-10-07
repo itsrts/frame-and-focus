@@ -26,7 +26,7 @@ const Loader = () => {
           delay: 0.2,
         }}
       >
-        <Logo className="w-[250px]" />
+        <Logo scrolled className="w-[250px]" />
       </motion.div>
     </motion.div>
   );

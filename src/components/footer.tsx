@@ -7,10 +7,10 @@ export default function Footer() {
 
   return (
     <footer className="bg-background border-t">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center">
-            <Logo className="w-[12rem]" />
+            <Logo scrolled className="w-[12rem] h-auto" />
           </div>
           <p className="text-xs md:text-sm text-muted-foreground order-last md:order-none">
             &copy; {currentYear} The Ulta Camera. All rights reserved.
