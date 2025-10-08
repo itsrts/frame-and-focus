@@ -18,6 +18,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { sendInquiry } from '@/app/actions';
+import { useTransition } from 'react';
 
 const bookingFormSchema = z.object({
   name: z.string().min(2, {
@@ -35,6 +37,8 @@ type BookingFormValues = z.infer<typeof bookingFormSchema>;
 
 export default function Booking() {
   const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingFormSchema),
     defaultValues: {
@@ -44,14 +48,29 @@ export default function Booking() {
     },
   });
 
-  function onSubmit(data: BookingFormValues) {
-    console.log(data);
-    toast({
-      title: 'Inquiry Sent!',
-      description: 'Thank you for reaching out. We will get back to you shortly.',
+  const onSubmit = form.handleSubmit(async (data) => {
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
     });
-    form.reset();
-  }
+
+    startTransition(async () => {
+      const result = await sendInquiry(formData);
+      if (result.message === 'Inquiry sent successfully!') {
+        toast({
+          title: 'Inquiry Sent!',
+          description: 'Thank you for reaching out. We will get back to you shortly.',
+        });
+        form.reset();
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong.',
+          description: result.message || 'There was a problem with your request.',
+        });
+      }
+    });
+  });
 
   return (
     <motion.section 
@@ -75,7 +94,7 @@ export default function Booking() {
             <div className="grid md:grid-cols-2">
                 <div className="p-6 md:p-10">
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
+                        <form onSubmit={onSubmit} className="space-y-4 md:space-y-6">
                             <FormField
                             control={form.control}
                             name="name"
@@ -119,8 +138,8 @@ export default function Booking() {
                                 </FormItem>
                             )}
                             />
-                            <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-white">
-                                Send Inquiry
+                            <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold" disabled={isPending}>
+                                {isPending ? 'Sending...' : 'Send Inquiry'}
                             </Button>
                         </form>
                     </Form>
