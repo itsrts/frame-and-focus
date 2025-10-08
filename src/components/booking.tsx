@@ -51,7 +51,7 @@ export default function Booking() {
     setIsPending(true);
 
     const formData = new FormData();
-    formData.append("access_key", "YOUR_ACCESS_KEY_HERE");
+    formData.append("access_key", process.env.NEXT_PUBLIC_EMAIL_API!);
     
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value);
