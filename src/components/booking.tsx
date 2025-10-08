@@ -18,8 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { sendInquiry } from '@/app/actions';
-import { useTransition } from 'react';
+import { useState } from 'react';
 
 const bookingFormSchema = z.object({
   name: z.string().min(2, {
@@ -37,7 +36,7 @@ type BookingFormValues = z.infer<typeof bookingFormSchema>;
 
 export default function Booking() {
   const { toast } = useToast();
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingFormSchema),
@@ -49,27 +48,54 @@ export default function Booking() {
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
+    setIsPending(true);
+
     const formData = new FormData();
+    formData.append("access_key", "YOUR_ACCESS_KEY_HERE");
+    
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
-    startTransition(async () => {
-      const result = await sendInquiry(formData);
-      if (result.message === 'Inquiry sent successfully!') {
-        toast({
-          title: 'Inquiry Sent!',
-          description: 'Thank you for reaching out. We will get back to you shortly.',
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
+
+    try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json"
+            },
+            body: json
         });
-        form.reset();
-      } else {
+
+        const result = await response.json();
+
+        if (result.success) {
+            toast({
+              title: 'Inquiry Sent!',
+              description: 'Thank you for reaching out. We will get back to you shortly.',
+            });
+            form.reset();
+        } else {
+            console.error("Web3Forms error:", result);
+            toast({
+              variant: 'destructive',
+              title: 'Uh oh! Something went wrong.',
+              description: result.message || 'There was a problem with your request.',
+            });
+        }
+    } catch (error) {
+        console.error("Submission error:", error);
         toast({
           variant: 'destructive',
           title: 'Uh oh! Something went wrong.',
-          description: result.message || 'There was a problem with your request.',
+          description: 'There was a problem submitting your form. Please try again.',
         });
-      }
-    });
+    } finally {
+        setIsPending(false);
+    }
   });
 
   return (
@@ -78,7 +104,7 @@ export default function Booking() {
       className="py-16 md:py-32 bg-secondary"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8 }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
