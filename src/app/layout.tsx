@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
+import { SiteContentProvider } from '@/context/site-content-context';
+import EditControls from '@/components/edit-controls';
 
 export const metadata: Metadata = {
   title: 'The Ulta Camera – Wedding Photography, Pre-Wedding Shoots, Invites & More in India',
@@ -28,8 +30,11 @@ export default function RootLayout({
           'min-h-screen bg-background font-body antialiased'
         )}
       >
-        {children}
-        <Toaster />
+        <SiteContentProvider>
+          {children}
+          <Toaster />
+          <EditControls />
+        </SiteContentProvider>
       </body>
     </html>
   );
