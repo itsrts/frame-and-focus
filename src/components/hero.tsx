@@ -15,6 +15,8 @@ type HeroProps = {
 };
 
 export default function Hero({ content }: HeroProps) {
+  if (!content) return null;
+
   return (
     <section
       id="home"

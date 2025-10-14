@@ -17,13 +17,31 @@ export default function Home() {
   const [content, setContent] = useState(siteContent);
 
   useEffect(() => {
+    // Load content from localStorage or initial content
+    const storedContent = localStorage.getItem('siteContent');
+    if (storedContent) {
+      setContent(JSON.parse(storedContent));
+    }
+
     const timer = setTimeout(() => {
       setLoading(false);
       document.body.style.cursor = 'auto';
       window.scrollTo(0, 0);
     }, 2000);
 
-    return () => clearTimeout(timer);
+    // Listen for content changes from other tabs
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'siteContent' && event.newValue) {
+        setContent(JSON.parse(event.newValue));
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   return (
