@@ -10,6 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { siteContent } from '@/app/lib/content';
+import { uploadImage } from '@/app/lib/cloudinary';
+import Image from 'next/image';
 
 const adminSchema = z.object({
   password: z.string().min(1, 'Password is required.'),
@@ -31,6 +33,7 @@ export default function UltaAdmin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [initialContent, setInitialContent] = useState<ContentFormValues>(siteContent);
+  const [isUploading, setIsUploading] = useState(false);
 
   const { toast } = useToast();
 
@@ -45,20 +48,18 @@ export default function UltaAdmin() {
   });
 
   useEffect(() => {
-    // Check if authenticated
     const authStatus = localStorage.getItem('ulta-admin-authenticated');
     if (authStatus === 'true') {
       setIsAuthenticated(true);
     }
 
-    // Load content from localStorage or initial content
     const storedContent = localStorage.getItem('siteContent');
     if (storedContent) {
       const parsedContent = JSON.parse(storedContent);
       setInitialContent(parsedContent);
       contentForm.reset(parsedContent);
     } else {
-        contentForm.reset(siteContent);
+      contentForm.reset(siteContent);
     }
 
     setLoading(false);
@@ -80,6 +81,22 @@ export default function UltaAdmin() {
       toast({ title: 'Content updated successfully!' });
     } catch (error) {
       toast({ variant: 'destructive', title: 'Failed to update content.' });
+    }
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const imageUrl = await uploadImage(file);
+      contentForm.setValue('hero.backgroundImage', imageUrl);
+      toast({ title: 'Image uploaded successfully!' });
+    } catch (error) {
+      toast({ variant: 'destructive', title: 'Image upload failed.' });
+    } finally {
+      setIsUploading(false);
     }
   };
   
@@ -185,19 +202,31 @@ export default function UltaAdmin() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={contentForm.control}
-                name="hero.backgroundImage"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Background Image URL</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <FormItem>
+                <FormLabel>Background Image</FormLabel>
+                <FormControl>
+                    <Input type="file" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
+                </FormControl>
+                {isUploading && <p>Uploading...</p>}
+                <FormField
+                    control={contentForm.control}
+                    name="hero.backgroundImage"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormControl>
+                            <Input type="hidden" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                 {contentForm.watch('hero.backgroundImage') && (
+                    <div className="mt-4">
+                        <p className="text-sm font-medium mb-2">Image Preview:</p>
+                        <Image src={contentForm.watch('hero.backgroundImage')} alt="Background Preview" width={200} height={100} className="rounded-md object-cover"/>
+                    </div>
+                 )}
+              </FormItem>
             </div>
           </div>
 
