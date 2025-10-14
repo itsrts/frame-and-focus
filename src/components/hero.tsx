@@ -4,14 +4,24 @@ import { Button } from '@/components/ui/button';
 import { ArrowDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export default function Hero() {
+type HeroProps = {
+  content: {
+    heading: string;
+    subheading: string;
+    ctaText: string;
+    ctaLink: string;
+    backgroundImage: string;
+  }
+};
+
+export default function Hero({ content }: HeroProps) {
   return (
     <section
       id="home"
       className="relative flex items-center justify-center h-screen"
     >
       <Image
-        src="/images/tuc-1.png"
+        src={content.backgroundImage}
         alt="Wedding photography"
         data-ai-hint="wedding photography"
         fill
@@ -33,7 +43,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          Your One-Stop Destination for Weddings, Pre-Weddings & More in India
+          {content.heading}
         </motion.h1>
         <motion.p
           className="mt-4 max-w-2xl mx-auto text-lg md:text-xl font-body drop-shadow-md"
@@ -41,7 +51,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          From photography to personalized invites, luxury gift hampers, and wedding accessories, The Ulta Camera turns your wedding dreams into reality.
+          {content.subheading}
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -49,8 +59,8 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.6 }}
         >
         <Button asChild size="lg" className="mt-8 bg-primary/80 hover:bg-primary text-primary-foreground text-lg md:text-xl font-bold">
-          <a href="#booking">
-            Plan Your Perfect Wedding Today
+          <a href={content.ctaLink}>
+            {content.ctaText}
           </a>
         </Button>
         </motion.div>
