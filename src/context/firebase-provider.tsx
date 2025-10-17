@@ -18,11 +18,10 @@ function getFirebaseConfig() {
       appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     };
   
-    // Simple check to ensure all keys are present
-    for (const [key, value] of Object.entries(firebaseConfig)) {
-      if (!value) {
-        console.error(`Firebase config missing: ${key}`);
-      }
+    // All config values are required for initialization
+    if (Object.values(firebaseConfig).some(value => !value)) {
+        console.error("One or more Firebase environment variables are missing.");
+        return null;
     }
   
     return firebaseConfig;
@@ -39,15 +38,23 @@ interface FirebaseContextType {
 
 const FirebaseContext = createContext<FirebaseContextType | undefined>(undefined);
 
-let firebaseApp: FirebaseApp;
-if (!getApps().length) {
-  const firebaseConfig = getFirebaseConfig();
-  if (Object.values(firebaseConfig).every(v => v)) {
-    firebaseApp = initializeApp(firebaseConfig);
-  }
-} else {
-  firebaseApp = getApps()[0];
+let firebaseApp: FirebaseApp | null = null;
+
+if (typeof window !== 'undefined') {
+    if (!getApps().length) {
+      const firebaseConfig = getFirebaseConfig();
+      if (firebaseConfig) {
+        try {
+            firebaseApp = initializeApp(firebaseConfig);
+        } catch (e) {
+            console.error("Failed to initialize Firebase", e);
+        }
+      }
+    } else {
+      firebaseApp = getApps()[0];
+    }
 }
+
 
 export const FirebaseProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [auth, setAuth] = useState<Auth | null>(null);
@@ -64,9 +71,6 @@ export const FirebaseProvider: React.FC<{ children: ReactNode }> = ({ children }
       const listener = onValue(connectedRef, (snap) => {
         if (snap.val() === true) {
           setDbConnection('connected');
-        } else {
-          // It might be connecting initially, so we don't immediately set to 'error'
-          // We let the initial state be 'connecting'
         }
       }, (error) => {
         console.error("Firebase connection error:", error);
@@ -82,7 +86,9 @@ export const FirebaseProvider: React.FC<{ children: ReactNode }> = ({ children }
       }, 5000); // 5 seconds timeout
 
       return () => {
-        off(connectedRef, 'value', listener);
+        if (listener) {
+            off(connectedRef, 'value', listener);
+        }
         clearTimeout(timeout);
       };
     } else {
