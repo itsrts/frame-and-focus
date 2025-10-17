@@ -42,14 +42,14 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    if (dbConnection === 'connected' && contentRef) {
+    if (dbConnection === 'connected' && contentRef && database) {
       const listener = onValue(contentRef, (snapshot) => {
         const data = snapshot.val();
         if (data && data.content) {
           setContent(data.content);
         } else {
           // If no data in DB, seed it with initial content
-          firebaseSet(ref(database!, 'content'), initialContentData)
+          firebaseSet(ref(database, 'content'), initialContentData)
             .then(() => {
               setContent(initialContentData);
               toast({ title: 'Database seeded with initial content.' });
