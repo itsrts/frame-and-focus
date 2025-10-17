@@ -6,7 +6,7 @@ import { useFirebase } from '@/context/firebase-provider';
 import { ref, onValue, set, update, remove, Unsubscribe } from 'firebase/database';
 import { useToast } from '@/hooks/use-toast';
 
-const APP_ID = process.env.NEXT_PUBLIC_APP_ID;
+const APP_ID = process.env.NEXT_PUBLIC_APP;
 
 interface DatabaseContextType {
   dbConnection: 'connecting' | 'connected' | 'error';
@@ -24,7 +24,7 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
 
   const getPath = useCallback((path: string) => {
     if (!APP_ID) {
-      console.error('NEXT_PUBLIC_APP_ID is not set in environment variables.');
+      console.error('NEXT_PUBLIC_APP is not set in environment variables.');
       toast({ variant: 'destructive', title: 'Configuration Error', description: 'App ID is not set.' });
       return '';
     }
