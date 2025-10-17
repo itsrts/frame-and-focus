@@ -15,6 +15,7 @@ interface SiteContentContextType {
   editingSection: string | null;
   enterEditMode: () => void;
   exitEditMode: (save: boolean) => void;
+  logout: () => void;
   handleContentChange: (path: string, value: any) => void;
   setEditingSection: (section: string | null) => void;
 }
@@ -30,6 +31,13 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     try {
+      // Check for admin auth status
+      const authStatus = localStorage.getItem('ulta-admin-authenticated');
+      if (authStatus === 'true') {
+        setIsEditMode(true);
+      }
+
+      // Load content from localStorage or initial data
       const storedContent = localStorage.getItem('siteContent');
       if (storedContent) {
         setContent(JSON.parse(storedContent));
@@ -39,6 +47,7 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.error('Failed to parse content from localStorage', error);
       setContent(initialContentData);
+      setIsEditMode(false);
     }
   }, []);
 
@@ -51,6 +60,9 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
           console.error('Failed to parse content from storage event', error);
         }
       }
+      if (event.key === 'ulta-admin-authenticated') {
+        setIsEditMode(event.newValue === 'true');
+      }
     };
     window.addEventListener('storage', handleStorageChange);
     return () => {
@@ -60,8 +72,19 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
 
   const enterEditMode = () => {
     setOriginalContent(cloneDeep(content));
+    localStorage.setItem('ulta-admin-authenticated', 'true');
     setIsEditMode(true);
   };
+  
+  const logout = () => {
+    localStorage.removeItem('ulta-admin-authenticated');
+    setIsEditMode(false);
+    setEditingSection(null);
+    if(originalContent) {
+      setContent(originalContent);
+    }
+    toast({ title: "You've been logged out." });
+  }
 
   const exitEditMode = (save: boolean) => {
     if (save && content) {
@@ -76,22 +99,25 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
         toast({ variant: 'destructive', title: 'Failed to save content.' });
       }
     } else {
-      setContent(originalContent);
+       if (originalContent) {
+        setContent(originalContent);
+      }
     }
-    setIsEditMode(false);
-    setOriginalContent(null);
     setEditingSection(null);
   };
 
   const handleContentChange = (path: string, value: any) => {
     if (!content) return;
+     if (!originalContent) {
+      setOriginalContent(cloneDeep(content));
+    }
     const newContent = cloneDeep(content);
     set(newContent, path, value);
     setContent(newContent);
   };
   
   return (
-    <SiteContentContext.Provider value={{ content, isEditMode, editingSection, enterEditMode, exitEditMode, handleContentChange, setEditingSection }}>
+    <SiteContentContext.Provider value={{ content, isEditMode, editingSection, enterEditMode, exitEditMode, logout, handleContentChange, setEditingSection }}>
       {children}
     </SiteContentContext.Provider>
   );

@@ -1,6 +1,6 @@
 
 'use client';
-import { Instagram, Facebook, Twitter, Pencil } from 'lucide-react';
+import { Instagram, Facebook, Twitter, Pencil, LogOut } from 'lucide-react';
 import Logo from './logo';
 import { useSiteContent } from '@/context/site-content-context';
 import { Button } from './ui/button';
@@ -21,7 +21,7 @@ import { useState } from 'react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const { enterEditMode } = useSiteContent();
+  const { isEditMode, enterEditMode, logout } = useSiteContent();
   const { toast } = useToast();
   const [password, setPassword] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +40,72 @@ export default function Footer() {
       }
     }
   };
+
+  const handleLogout = () => {
+    logout();
+  }
+
+  const AuthButton = () => {
+    if(isEditMode) {
+      return (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-muted-foreground hover:text-primary"
+          aria-label="Disable Edit Mode"
+          onClick={handleLogout}
+        >
+          <LogOut className="h-5 w-5" />
+        </Button>
+      )
+    }
+
+    return (
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-muted-foreground hover:text-primary"
+            aria-label="Enable Edit Mode"
+          >
+            <Pencil className="h-5 w-5" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <form onSubmit={handlePasswordSubmit}>
+            <DialogHeader>
+              <DialogTitle>Admin Authentication</DialogTitle>
+              <DialogDescription>
+                Enter the admin password to enable edit mode.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="password" className="text-right">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  className="col-span-3"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoFocus
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                  <Button type="button" variant="secondary">Cancel</Button>
+              </DialogClose>
+              <Button type="submit">Enable Editing</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    )
+  }
 
   return (
     <footer className="bg-background border-t py-4">
@@ -73,49 +139,7 @@ export default function Footer() {
             >
               <Twitter className="h-6 w-6" />
             </a>
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground hover:text-primary"
-                  aria-label="Enable Edit Mode"
-                >
-                  <Pencil className="h-5 w-5" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <form onSubmit={handlePasswordSubmit}>
-                  <DialogHeader>
-                    <DialogTitle>Admin Authentication</DialogTitle>
-                    <DialogDescription>
-                      Enter the admin password to enable edit mode.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="password" className="text-right">
-                        Password
-                      </Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        className="col-span-3"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        autoFocus
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                       <Button type="button" variant="secondary">Cancel</Button>
-                    </DialogClose>
-                    <Button type="submit">Enable Editing</Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
+            <AuthButton />
           </div>
         </div>
       </div>
