@@ -1,7 +1,8 @@
+
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowDown, Upload } from 'lucide-react';
+import { ArrowDown, Upload, Pencil, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSiteContent } from '@/context/site-content-context';
 import { Input } from './ui/input';
@@ -12,7 +13,7 @@ import { uploadImage } from '@/app/lib/cloudinary';
 import { useToast } from '@/hooks/use-toast';
 
 export default function Hero() {
-  const { content, isEditMode, handleContentChange } = useSiteContent();
+  const { content, isEditMode, editingSection, setEditingSection, handleContentChange } = useSiteContent();
   const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
 
@@ -34,12 +35,13 @@ export default function Hero() {
     }
   };
 
+  const isCurrentlyEditing = isEditMode && editingSection === 'hero';
   const { hero } = content;
 
   return (
     <section
       id="home"
-      className="relative flex items-center justify-center h-screen"
+      className="relative flex items-center justify-center h-screen group"
     >
       <Image
         src={hero.backgroundImage}
@@ -52,9 +54,22 @@ export default function Hero() {
       />
       {isEditMode && (
         <div className="absolute top-4 right-4 z-20">
+          <Button
+            size="sm"
+            onClick={() => setEditingSection(isCurrentlyEditing ? null : 'hero')}
+            disabled={editingSection !== null && !isCurrentlyEditing}
+            className="bg-background/80 hover:bg-background text-foreground backdrop-blur-sm"
+          >
+            {isCurrentlyEditing ? <X className="mr-2" /> : <Pencil className="mr-2" />}
+            {isCurrentlyEditing ? 'Done' : 'Edit Hero'}
+          </Button>
+        </div>
+      )}
+      {isCurrentlyEditing && (
+        <div className="absolute top-16 right-4 z-20">
           <Label
             htmlFor="hero-bg-upload"
-            className="cursor-pointer bg-background text-foreground p-2 rounded-md shadow-lg flex items-center gap-2"
+            className="cursor-pointer bg-background text-foreground p-2 rounded-md shadow-lg flex items-center gap-2 text-sm"
           >
             <Upload className="h-4 w-4" />
             {isUploading ? 'Uploading...' : 'Change Background'}
@@ -77,7 +92,7 @@ export default function Hero() {
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       >
-        {isEditMode ? (
+        {isCurrentlyEditing ? (
           <Textarea
             value={hero.heading}
             onChange={(e) => handleContentChange('hero.heading', e.target.value)}
@@ -94,7 +109,7 @@ export default function Hero() {
           </motion.h1>
         )}
 
-        {isEditMode ? (
+        {isCurrentlyEditing ? (
           <Textarea
             value={hero.subheading}
             onChange={(e) => handleContentChange('hero.subheading', e.target.value)}
@@ -116,7 +131,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          {isEditMode ? (
+          {isCurrentlyEditing ? (
             <div className='flex items-center gap-2 mt-8 justify-center'>
               <Input
                 value={hero.ctaText}

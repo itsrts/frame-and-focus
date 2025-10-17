@@ -12,9 +12,11 @@ type SiteContent = typeof initialContentData;
 interface SiteContentContextType {
   content: SiteContent | null;
   isEditMode: boolean;
+  editingSection: string | null;
   enterEditMode: () => void;
   exitEditMode: (save: boolean) => void;
   handleContentChange: (path: string, value: any) => void;
+  setEditingSection: (section: string | null) => void;
 }
 
 const SiteContentContext = createContext<SiteContentContextType | undefined>(undefined);
@@ -23,6 +25,7 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
   const [content, setContent] = useState<SiteContent | null>(null);
   const [originalContent, setOriginalContent] = useState<SiteContent | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [editingSection, setEditingSection] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -64,7 +67,6 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
     if (save && content) {
       try {
         localStorage.setItem('siteContent', JSON.stringify(content));
-        // Also update other tabs
         window.dispatchEvent(new StorageEvent('storage', {
           key: 'siteContent',
           newValue: JSON.stringify(content)
@@ -78,6 +80,7 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
     }
     setIsEditMode(false);
     setOriginalContent(null);
+    setEditingSection(null);
   };
 
   const handleContentChange = (path: string, value: any) => {
@@ -88,7 +91,7 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
   };
   
   return (
-    <SiteContentContext.Provider value={{ content, isEditMode, enterEditMode, exitEditMode, handleContentChange }}>
+    <SiteContentContext.Provider value={{ content, isEditMode, editingSection, enterEditMode, exitEditMode, handleContentChange, setEditingSection }}>
       {children}
     </SiteContentContext.Provider>
   );
