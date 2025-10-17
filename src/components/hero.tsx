@@ -124,12 +124,11 @@ export default function Hero() {
       </motion.div>
       
       {isEditMode && (
-        <div className="absolute bottom-4 right-4 z-20 flex gap-2">
-          <Button
+        <div className="absolute top-4 right-4 z-20 flex gap-2">
+           <Button
             size="sm"
             onClick={() => setEditingSection(isCurrentlyEditing ? null : 'hero')}
             disabled={editingSection !== null && !isCurrentlyEditing}
-            className="bg-background/80 hover:bg-background text-foreground backdrop-blur-sm"
           >
             {isCurrentlyEditing ? <X className="mr-2" /> : <Pencil className="mr-2" />}
             {isCurrentlyEditing ? 'Done' : 'Edit Hero'}

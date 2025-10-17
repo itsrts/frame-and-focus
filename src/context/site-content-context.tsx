@@ -119,9 +119,15 @@ export const SiteContentProvider = ({ children, contentPath }: { children: React
 
   const enterSectionEditing = (section: string | null) => {
     if (!isEditMode) return;
-    if (section) {
+    
+    // If we're starting to edit a new section, save the current state for cancellation.
+    if (section && !editingSection) {
       setOriginalContent(cloneDeep(content));
     }
+    
+    // If we are closing the editor, the exitEditMode function will be called from the component
+    // via the 'Done' button, which handles saving or canceling.
+    // Here we just manage which section is being edited.
     setEditingSection(section);
   }
 
