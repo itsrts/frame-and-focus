@@ -11,30 +11,32 @@ import Booking from '@/components/booking';
 import Footer from '@/components/footer';
 import Loader from '@/components/loader';
 import { useSiteContent } from '@/context/site-content-context';
+import { useFirebase } from '@/firebase';
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
+  const [appReady, setAppReady] = useState(false);
   const { content } = useSiteContent();
+  const { dbConnection } = useFirebase();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-      document.body.style.cursor = 'auto';
-      window.scrollTo(0, 0);
-    }, 2000);
+    if (content && dbConnection === 'connected') {
+      const timer = setTimeout(() => {
+        setAppReady(true);
+        document.body.style.cursor = 'auto';
+        window.scrollTo(0, 0);
+      }, 2000); // Keep loader for 2 seconds for smooth transition
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
-
-  if (!content) {
-    return <Loader />;
-  }
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [content, dbConnection]);
+  
+  const isLoading = !appReady || !content || dbConnection !== 'connected';
 
   return (
     <>
-      {loading && <Loader />}
+      {isLoading && <Loader />}
       <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-1">

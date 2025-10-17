@@ -1,0 +1,21 @@
+{
+  "entities": {
+    "siteContent": {
+      "title": "Site Content",
+      "description": "The entire content structure for the website.",
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "auth": {
+    "providers": []
+  },
+  "firestore": {
+    "/content/live": {
+      "schema": {
+        "$ref": "#/entities/siteContent"
+      },
+      "description": "Live content for the website."
+    }
+  }
+}
