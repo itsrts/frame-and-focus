@@ -64,20 +64,26 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
   }, [database, toast]);
 
   useEffect(() => {
-    if (dbConnection === 'connected') {
-        readData('admin', (data) => {
+    if (dbConnection === 'connected' && database) {
+        const adminRef = ref(database, 'admin');
+        const listener = onValue(adminRef, (snapshot) => {
+            const data = snapshot.val();
             if (!data || !data.password) {
+                console.log("Seeding admin password...");
                 writeData('admin', { password: 'your_secure_password' })
                     .then(() => {
                         toast({ title: 'Admin password seeded in database.' });
                     })
                     .catch(error => {
                         console.error('Failed to seed admin password', error);
+                        toast({ variant: 'destructive', title: 'Failed to seed password.'})
                     });
             }
+        }, {
+            onlyOnce: true // Ensures this listener only runs once
         });
     }
-  }, [dbConnection, readData, writeData, toast]);
+  }, [dbConnection, database, writeData, toast]);
 
   return (
     <DatabaseContext.Provider value={{ dbConnection, readData, writeData, updateData, deleteData }}>
