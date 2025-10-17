@@ -7,9 +7,9 @@ import { Save, XCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function EditControls() {
-  const { isEditMode, exitEditMode } = useSiteContent();
+  const { editingSection, exitEditMode } = useSiteContent();
 
-  if (!isEditMode) {
+  if (!editingSection) {
     return null;
   }
 
