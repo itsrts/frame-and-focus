@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { useFirebase } from '@/context/firebase-provider';
-import { ref, onValue, set as firebaseSet, get, off } from 'firebase/database';
+import { ref, onValue, set as firebaseSet, off } from 'firebase/database';
 import { siteContent as initialContentData } from '@/app/lib/content';
 import { useToast } from '@/hooks/use-toast';
 import cloneDeep from 'lodash.clonedeep';
@@ -31,7 +31,7 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
   const [editingSection, setEditingSection] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const contentRef = database ? ref(database, 'content') : null;
+  const contentRef = database ? ref(database, '/') : null;
 
   useEffect(() => {
     const authStatus = localStorage.getItem('ulta-admin-authenticated');
@@ -44,11 +44,11 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
     if (dbConnection === 'connected' && contentRef) {
       const listener = onValue(contentRef, (snapshot) => {
         const data = snapshot.val();
-        if (data) {
-          setContent(data);
+        if (data && data.content) {
+          setContent(data.content);
         } else {
           // If no data in DB, seed it with initial content
-          firebaseSet(contentRef, initialContentData)
+          firebaseSet(ref(database!, 'content'), initialContentData)
             .then(() => {
               setContent(initialContentData);
               toast({ title: 'Database seeded with initial content.' });
@@ -83,14 +83,10 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const handleContentChange = useCallback((path: string, value: any) => {
-      if (!contentRef) return;
+      if (!contentRef || !content) return;
 
-      const newContent = cloneDeep(content || initialContentData);
+      const newContent = cloneDeep(content);
       
-      const fullPath = path ? `/${path.replace(/\./g, '/')}` : '';
-
-      // For direct update on temporary state
-      const tempContent = cloneDeep(content);
       const set = (obj: any, path: string, value: any) => {
         const keys = path.split('.');
         let current = obj;
@@ -99,16 +95,18 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
         }
         current[keys[keys.length - 1]] = value;
       }
-      if(path) set(tempContent, path, value);
-      setContent(tempContent as SiteContent);
+      if(path) {
+        set(newContent, path, value);
+        setContent(newContent);
+      }
     },
     [content, contentRef]
   );
   
   const saveChanges = () => {
-    if (!content || !contentRef) return;
-
-    firebaseSet(contentRef, content)
+    if (!content || !database) return;
+    const contentToSaveRef = ref(database, 'content');
+    firebaseSet(contentToSaveRef, content)
       .then(() => {
         toast({ title: 'Content saved successfully!' });
         setOriginalContent(null);
