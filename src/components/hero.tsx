@@ -52,38 +52,6 @@ export default function Hero() {
         priority
         quality={100}
       />
-      {isEditMode && (
-        <div className="absolute top-4 right-4 z-20">
-          <Button
-            size="sm"
-            onClick={() => setEditingSection(isCurrentlyEditing ? null : 'hero')}
-            disabled={editingSection !== null && !isCurrentlyEditing}
-            className="bg-background/80 hover:bg-background text-foreground backdrop-blur-sm"
-          >
-            {isCurrentlyEditing ? <X className="mr-2" /> : <Pencil className="mr-2" />}
-            {isCurrentlyEditing ? 'Done' : 'Edit Hero'}
-          </Button>
-        </div>
-      )}
-      {isCurrentlyEditing && (
-        <div className="absolute top-16 right-4 z-20">
-          <Label
-            htmlFor="hero-bg-upload"
-            className="cursor-pointer bg-background text-foreground p-2 rounded-md shadow-lg flex items-center gap-2 text-sm"
-          >
-            <Upload className="h-4 w-4" />
-            {isUploading ? 'Uploading...' : 'Change Background'}
-          </Label>
-          <Input
-            id="hero-bg-upload"
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleImageUpload}
-            disabled={isUploading}
-          />
-        </div>
-      )}
       <div className="absolute inset-0 bg-black/50" />
       <motion.div
         className="relative z-10 text-center text-white p-4"
@@ -154,6 +122,40 @@ export default function Hero() {
           )}
         </motion.div>
       </motion.div>
+      
+      {isEditMode && (
+        <div className="absolute bottom-4 right-4 z-20 flex gap-2">
+          <Button
+            size="sm"
+            onClick={() => setEditingSection(isCurrentlyEditing ? null : 'hero')}
+            disabled={editingSection !== null && !isCurrentlyEditing}
+            className="bg-background/80 hover:bg-background text-foreground backdrop-blur-sm"
+          >
+            {isCurrentlyEditing ? <X className="mr-2" /> : <Pencil className="mr-2" />}
+            {isCurrentlyEditing ? 'Done' : 'Edit Hero'}
+          </Button>
+          {isCurrentlyEditing && (
+            <div>
+              <Label
+                htmlFor="hero-bg-upload"
+                className="cursor-pointer bg-background text-foreground p-2 rounded-md shadow-lg flex items-center gap-2 text-sm h-9"
+              >
+                <Upload className="h-4 w-4" />
+                {isUploading ? 'Uploading...' : 'Change Background'}
+              </Label>
+              <Input
+                id="hero-bg-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+                disabled={isUploading}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="absolute bottom-10 z-10 text-white animate-bounce">
         <a href="#about" aria-label="Scroll to about section">
           <ArrowDown className="h-8 w-8" />
