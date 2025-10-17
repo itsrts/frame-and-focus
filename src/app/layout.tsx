@@ -4,7 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import { SiteContentProvider } from '@/context/site-content-context';
 import EditControls from '@/components/edit-controls';
-import { FirebaseClientProvider } from '@/firebase/client-provider';
+import { FirebaseProvider } from '@/context/firebase-provider';
 
 export const metadata: Metadata = {
   title: 'The Ulta Camera – Wedding Photography, Pre-Wedding Shoots, Invites & More in India',
@@ -31,13 +31,13 @@ export default function RootLayout({
           'min-h-screen bg-background font-body antialiased'
         )}
       >
-        <FirebaseClientProvider>
+        <FirebaseProvider>
           <SiteContentProvider>
             {children}
             <Toaster />
             <EditControls />
           </SiteContentProvider>
-        </FirebaseClientProvider>
+        </FirebaseProvider>
       </body>
     </html>
   );

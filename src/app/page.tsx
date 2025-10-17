@@ -11,7 +11,7 @@ import Booking from '@/components/booking';
 import Footer from '@/components/footer';
 import Loader from '@/components/loader';
 import { useSiteContent } from '@/context/site-content-context';
-import { useFirebase } from '@/firebase';
+import { useFirebase } from '@/context/firebase-provider';
 
 export default function Home() {
   const [appReady, setAppReady] = useState(false);

@@ -7,7 +7,26 @@ import { FirebaseApp, getApps, initializeApp } from 'firebase/app';
 import { Auth, getAuth } from 'firebase/auth';
 import { Database, getDatabase, ref, onValue, off } from 'firebase/database';
 
-import { getFirebaseConfig } from '@/firebase/config';
+function getFirebaseConfig() {
+    const firebaseConfig = {
+      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+      appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    };
+  
+    // Simple check to ensure all keys are present
+    for (const [key, value] of Object.entries(firebaseConfig)) {
+      if (!value) {
+        console.error(`Firebase config missing: ${key}`);
+      }
+    }
+  
+    return firebaseConfig;
+}
 
 type DbConnectionStatus = 'connecting' | 'connected' | 'error';
 
@@ -23,7 +42,9 @@ const FirebaseContext = createContext<FirebaseContextType | undefined>(undefined
 let firebaseApp: FirebaseApp;
 if (!getApps().length) {
   const firebaseConfig = getFirebaseConfig();
-  firebaseApp = initializeApp(firebaseConfig);
+  if (Object.values(firebaseConfig).every(v => v)) {
+    firebaseApp = initializeApp(firebaseConfig);
+  }
 } else {
   firebaseApp = getApps()[0];
 }
@@ -64,6 +85,8 @@ export const FirebaseProvider: React.FC<{ children: ReactNode }> = ({ children }
         off(connectedRef, 'value', listener);
         clearTimeout(timeout);
       };
+    } else {
+        setDbConnection('error');
     }
   }, [dbConnection]);
 
