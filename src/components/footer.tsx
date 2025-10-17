@@ -31,7 +31,9 @@ export default function Footer() {
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password) {
-      readData('admin/password', (dbPassword) => {
+      // The readData function sets up a listener, we need to unsubscribe
+      // after we get the value to avoid memory leaks.
+      const unsubscribe = readData('admin-password', (dbPassword) => {
         if (password === dbPassword) {
           enterEditMode();
           toast({ title: 'Edit mode enabled.' });
@@ -41,6 +43,8 @@ export default function Footer() {
           toast({ variant: 'destructive', title: 'Invalid password.' });
           setPassword('');
         }
+        // Unsubscribe after checking the password
+        unsubscribe();
       });
     }
   };

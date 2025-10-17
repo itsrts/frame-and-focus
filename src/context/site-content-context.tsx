@@ -8,7 +8,7 @@ import cloneDeep from 'lodash.clonedeep';
 import set from 'lodash.set';
 import { useDatabase } from './database-provider';
 
-type SiteContent = typeof initialContentData;
+type SiteContent = typeof initialContentData['landing-page'];
 
 interface SiteContentContextType {
   content: SiteContent | null;
@@ -22,6 +22,8 @@ interface SiteContentContextType {
 }
 
 const SiteContentContext = createContext<SiteContentContextType | undefined>(undefined);
+
+const CONTENT_PATH = 'landing-page';
 
 export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
   const { readData, writeData, dbConnection } = useDatabase();
@@ -40,14 +42,14 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (dbConnection === 'connected') {
-      readData('content', (data) => {
+      const unsubscribe = readData(CONTENT_PATH, (data) => {
         if (data) {
           setContent(data);
         } else {
           // If no data in DB, seed it with initial content
-          writeData('content', initialContentData)
+          writeData(CONTENT_PATH, initialContentData[CONTENT_PATH])
             .then(() => {
-              setContent(initialContentData);
+              setContent(initialContentData[CONTENT_PATH]);
               toast({ title: 'Database seeded with initial content.' });
             })
             .catch(error => {
@@ -56,6 +58,7 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
             });
         }
       });
+      return () => unsubscribe();
     }
   }, [dbConnection, readData, writeData, toast]);
 
@@ -85,7 +88,7 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
   
   const saveChanges = () => {
     if (!content) return;
-    writeData('content', content)
+    writeData(CONTENT_PATH, content)
       .then(() => {
         toast({ title: 'Content saved successfully!' });
         setOriginalContent(null);

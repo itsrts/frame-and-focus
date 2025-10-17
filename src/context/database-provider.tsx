@@ -6,6 +6,8 @@ import { useFirebase } from '@/context/firebase-provider';
 import { ref, onValue, set, update, remove, Unsubscribe } from 'firebase/database';
 import { useToast } from '@/hooks/use-toast';
 
+const APP_ID = 'app-id-tuc';
+
 interface DatabaseContextType {
   dbConnection: 'connecting' | 'connected' | 'error';
   readData: (path: string, callback: (data: any) => void) => Unsubscribe;
@@ -20,57 +22,59 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
   const { database, dbConnection } = useFirebase();
   const { toast } = useToast();
 
+  const getPath = useCallback((path: string) => `${APP_ID}/${path}`, []);
+
   const readData = useCallback((path: string, callback: (data: any) => void): Unsubscribe => {
     if (!database) {
         toast({ variant: "destructive", title: "Database not connected." });
         return () => {};
     }
-    const dataRef = ref(database, path);
+    const dataRef = ref(database, getPath(path));
     const listener = onValue(dataRef, (snapshot) => {
         callback(snapshot.val());
     }, (error) => {
         console.error(`Firebase read failed at path: ${path}`, error);
-        toast({ variant: "destructive", title: "Failed to read data." });
+        toast({ variant: "destructive", title: "Failed to read data.", description: error.message });
     });
 
     return listener;
-  }, [database, toast]);
+  }, [database, toast, getPath]);
 
   const writeData = useCallback(async (path: string, data: any) => {
     if (!database) {
         toast({ variant: "destructive", title: "Database not connected." });
         return;
     }
-    const dataRef = ref(database, path);
+    const dataRef = ref(database, getPath(path));
     await set(dataRef, data);
-  }, [database, toast]);
+  }, [database, toast, getPath]);
 
   const updateData = useCallback(async (path: string, data: any) => {
     if (!database) {
         toast({ variant: "destructive", title: "Database not connected." });
         return;
     }
-    const dataRef = ref(database, path);
+    const dataRef = ref(database, getPath(path));
     await update(dataRef, data);
-  }, [database, toast]);
+  }, [database, toast, getPath]);
 
   const deleteData = useCallback(async (path: string) => {
     if (!database) {
         toast({ variant: "destructive", title: "Database not connected." });
         return;
     }
-    const dataRef = ref(database, path);
+    const dataRef = ref(database, getPath(path));
     await remove(dataRef);
-  }, [database, toast]);
+  }, [database, toast, getPath]);
 
   useEffect(() => {
     if (dbConnection === 'connected' && database) {
-        const adminRef = ref(database, 'admin');
-        const listener = onValue(adminRef, (snapshot) => {
+        const adminRef = ref(database, getPath('admin-password'));
+        onValue(adminRef, (snapshot) => {
             const data = snapshot.val();
-            if (!data || !data.password) {
+            if (data === null) { // Check if data is null, meaning it doesn't exist
                 console.log("Seeding admin password...");
-                writeData('admin', { password: 'your_secure_password' })
+                set(adminRef, 'your_secure_password')
                     .then(() => {
                         toast({ title: 'Admin password seeded in database.' });
                     })
@@ -80,10 +84,10 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
                     });
             }
         }, {
-            onlyOnce: true // Ensures this listener only runs once
+            onlyOnce: true
         });
     }
-  }, [dbConnection, database, writeData, toast]);
+  }, [dbConnection, database, getPath, toast]);
 
   return (
     <DatabaseContext.Provider value={{ dbConnection, readData, writeData, updateData, deleteData }}>
