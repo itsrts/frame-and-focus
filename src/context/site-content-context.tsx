@@ -7,6 +7,7 @@ import { ref, onValue, set as firebaseSet, off } from 'firebase/database';
 import { siteContent as initialContentData } from '@/app/lib/content';
 import { useToast } from '@/hooks/use-toast';
 import cloneDeep from 'lodash.clonedeep';
+import set from 'lodash.set';
 
 type SiteContent = typeof initialContentData;
 
@@ -65,7 +66,7 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
 
       return () => off(contentRef, 'value', listener);
     }
-  }, [dbConnection, database]);
+  }, [dbConnection, database, contentRef, toast]);
 
   const enterEditMode = () => {
     localStorage.setItem('ulta-admin-authenticated', 'true');
@@ -83,24 +84,19 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const handleContentChange = useCallback((path: string, value: any) => {
-      if (!contentRef || !content) return;
+      if (!content) return;
 
       const newContent = cloneDeep(content);
       
-      const set = (obj: any, path: string, value: any) => {
-        const keys = path.split('.');
-        let current = obj;
-        for (let i = 0; i < keys.length - 1; i++) {
-          current = current[keys[i]];
-        }
-        current[keys[keys.length - 1]] = value;
-      }
-      if(path) {
+      if (path) {
         set(newContent, path, value);
-        setContent(newContent);
+      } else {
+        // If path is empty, replace the whole content
+        Object.assign(newContent, value);
       }
+      setContent(newContent);
     },
-    [content, contentRef]
+    [content]
   );
   
   const saveChanges = () => {
@@ -133,9 +129,11 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
     setEditingSection(null);
   };
 
-  const enterSectionEditing = (section: string) => {
+  const enterSectionEditing = (section: string | null) => {
     if (!isEditMode) return;
-    setOriginalContent(cloneDeep(content));
+    if (section) {
+      setOriginalContent(cloneDeep(content));
+    }
     setEditingSection(section);
   }
 
