@@ -2,12 +2,11 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { useFirebase } from '@/context/firebase-provider';
-import { ref, onValue, set as firebaseSet, off } from 'firebase/database';
 import { siteContent as initialContentData } from '@/app/lib/content';
 import { useToast } from '@/hooks/use-toast';
 import cloneDeep from 'lodash.clonedeep';
 import set from 'lodash.set';
+import { useDatabase } from './database-provider';
 
 type SiteContent = typeof initialContentData;
 
@@ -25,31 +24,28 @@ interface SiteContentContextType {
 const SiteContentContext = createContext<SiteContentContextType | undefined>(undefined);
 
 export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
-  const { database, dbConnection } = useFirebase();
+  const { readData, writeData, dbConnection } = useDatabase();
   const [content, setContent] = useState<SiteContent | null>(null);
   const [originalContent, setOriginalContent] = useState<SiteContent | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingSection, setEditingSection] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const contentRef = database ? ref(database, '/') : null;
-
   useEffect(() => {
-    const authStatus = localStorage.getItem('ulta-admin-authenticated');
+    const authStatus = sessionStorage.getItem('ulta-admin-authenticated');
     if (authStatus === 'true') {
       setIsEditMode(true);
     }
   }, []);
 
   useEffect(() => {
-    if (dbConnection === 'connected' && contentRef && database) {
-      const listener = onValue(contentRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data && data.content) {
-          setContent(data.content);
+    if (dbConnection === 'connected') {
+      readData('content', (data) => {
+        if (data) {
+          setContent(data);
         } else {
           // If no data in DB, seed it with initial content
-          firebaseSet(ref(database, 'content'), initialContentData)
+          writeData('content', initialContentData)
             .then(() => {
               setContent(initialContentData);
               toast({ title: 'Database seeded with initial content.' });
@@ -59,22 +55,17 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
               toast({ variant: 'destructive', title: 'Failed to seed database.' });
             });
         }
-      }, (error) => {
-        console.error("Firebase read failed: ", error);
-        toast({ variant: 'destructive', title: 'Failed to load site content.' });
       });
-
-      return () => off(contentRef, 'value', listener);
     }
-  }, [dbConnection, database, contentRef, toast]);
+  }, [dbConnection, readData, writeData, toast]);
 
   const enterEditMode = () => {
-    localStorage.setItem('ulta-admin-authenticated', 'true');
+    sessionStorage.setItem('ulta-admin-authenticated', 'true');
     setIsEditMode(true);
   };
   
   const logout = () => {
-    localStorage.removeItem('ulta-admin-authenticated');
+    sessionStorage.removeItem('ulta-admin-authenticated');
     setIsEditMode(false);
     setEditingSection(null);
     if(originalContent) {
@@ -85,23 +76,16 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
 
   const handleContentChange = useCallback((path: string, value: any) => {
       if (!content) return;
-
       const newContent = cloneDeep(content);
-      
-      if (path) {
-        set(newContent, path, value);
-      } else {
-        Object.assign(newContent, value);
-      }
+      set(newContent, path, value);
       setContent(newContent);
     },
     [content]
   );
   
   const saveChanges = () => {
-    if (!content || !database) return;
-    const contentToSaveRef = ref(database, 'content');
-    firebaseSet(contentToSaveRef, content)
+    if (!content) return;
+    writeData('content', content)
       .then(() => {
         toast({ title: 'Content saved successfully!' });
         setOriginalContent(null);

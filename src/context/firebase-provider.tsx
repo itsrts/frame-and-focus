@@ -6,6 +6,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { FirebaseApp, getApps, initializeApp } from 'firebase/app';
 import { Auth, getAuth } from 'firebase/auth';
 import { Database, getDatabase, ref, onValue, off } from 'firebase/database';
+import { DatabaseProvider } from './database-provider';
 
 function getFirebaseConfig() {
     const firebaseConfig = {
@@ -20,7 +21,7 @@ function getFirebaseConfig() {
   
     // All config values are required for initialization
     if (Object.values(firebaseConfig).some(value => !value)) {
-        console.log("One or more Firebase environment variables are missing.");
+        console.error("One or more Firebase environment variables are missing.");
         return null;
     }
   
@@ -98,7 +99,13 @@ export const FirebaseProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   const value = { app: firebaseApp, auth, database, dbConnection };
 
-  return <FirebaseContext.Provider value={value}>{children}</FirebaseContext.Provider>;
+  return (
+    <FirebaseContext.Provider value={value}>
+        <DatabaseProvider>
+            {children}
+        </DatabaseProvider>
+    </FirebaseContext.Provider>
+  );
 };
 
 export const useFirebase = () => {

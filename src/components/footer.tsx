@@ -18,10 +18,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from './ui/label';
 import { useState } from 'react';
+import { useDatabase } from '@/context/database-provider';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const { isEditMode, enterEditMode, logout } = useSiteContent();
+  const { readData } = useDatabase();
   const { toast } = useToast();
   const [password, setPassword] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -29,15 +31,17 @@ export default function Footer() {
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password) {
-      if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
-        enterEditMode();
-        toast({ title: 'Edit mode enabled.' });
-        setIsOpen(false);
-        setPassword('');
-      } else {
-        toast({ variant: 'destructive', title: 'Invalid password.' });
-        setPassword('');
-      }
+      readData('admin/password', (dbPassword) => {
+        if (password === dbPassword) {
+          enterEditMode();
+          toast({ title: 'Edit mode enabled.' });
+          setIsOpen(false);
+          setPassword('');
+        } else {
+          toast({ variant: 'destructive', title: 'Invalid password.' });
+          setPassword('');
+        }
+      });
     }
   };
 
