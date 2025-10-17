@@ -1,10 +1,11 @@
 
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { useFirebase } from '@/context/firebase-provider';
+import { ref, onValue, set as firebaseSet, get, off } from 'firebase/database';
 import { siteContent as initialContentData } from '@/app/lib/content';
 import { useToast } from '@/hooks/use-toast';
-import set from 'lodash.set';
 import cloneDeep from 'lodash.clonedeep';
 
 type SiteContent = typeof initialContentData;
@@ -23,55 +24,50 @@ interface SiteContentContextType {
 const SiteContentContext = createContext<SiteContentContextType | undefined>(undefined);
 
 export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
+  const { database, dbConnection } = useFirebase();
   const [content, setContent] = useState<SiteContent | null>(null);
   const [originalContent, setOriginalContent] = useState<SiteContent | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingSection, setEditingSection] = useState<string | null>(null);
   const { toast } = useToast();
 
-  useEffect(() => {
-    try {
-      // Check for admin auth status
-      const authStatus = localStorage.getItem('ulta-admin-authenticated');
-      if (authStatus === 'true') {
-        setIsEditMode(true);
-      }
+  const contentRef = database ? ref(database, 'content') : null;
 
-      // Load content from localStorage or initial data
-      const storedContent = localStorage.getItem('siteContent');
-      if (storedContent) {
-        setContent(JSON.parse(storedContent));
-      } else {
-        setContent(initialContentData);
-      }
-    } catch (error) {
-      console.error('Failed to parse content from localStorage', error);
-      setContent(initialContentData);
-      setIsEditMode(false);
+  useEffect(() => {
+    const authStatus = localStorage.getItem('ulta-admin-authenticated');
+    if (authStatus === 'true') {
+      setIsEditMode(true);
     }
   }, []);
 
   useEffect(() => {
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === 'siteContent' && event.newValue) {
-        try {
-          setContent(JSON.parse(event.newValue));
-        } catch (error) {
-          console.error('Failed to parse content from storage event', error);
+    if (dbConnection === 'connected' && contentRef) {
+      const listener = onValue(contentRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          setContent(data);
+        } else {
+          // If no data in DB, seed it with initial content
+          firebaseSet(contentRef, initialContentData)
+            .then(() => {
+              setContent(initialContentData);
+              toast({ title: 'Database seeded with initial content.' });
+            })
+            .catch(error => {
+              console.error("Failed to seed database: ", error);
+              toast({ variant: 'destructive', title: 'Failed to seed database.' });
+            });
         }
-      }
-      if (event.key === 'ulta-admin-authenticated') {
-        setIsEditMode(event.newValue === 'true');
-      }
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
+      }, (error) => {
+        console.error("Firebase read failed: ", error);
+        toast({ variant: 'destructive', title: 'Failed to load site content.' });
+      });
+
+      return () => off(contentRef, 'value', listener);
+    }
+  }, [dbConnection, database]);
 
   const enterEditMode = () => {
-    setOriginalContent(cloneDeep(content));
     localStorage.setItem('ulta-admin-authenticated', 'true');
     setIsEditMode(true);
   };
@@ -81,43 +77,72 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
     setIsEditMode(false);
     setEditingSection(null);
     if(originalContent) {
-      setContent(originalContent);
+      handleContentChange('', originalContent); // Revert all changes on logout
     }
     toast({ title: "You've been logged out." });
   }
 
-  const exitEditMode = (save: boolean) => {
-    if (save && content) {
-      try {
-        localStorage.setItem('siteContent', JSON.stringify(content));
-        window.dispatchEvent(new StorageEvent('storage', {
-          key: 'siteContent',
-          newValue: JSON.stringify(content)
-        }));
+  const handleContentChange = useCallback((path: string, value: any) => {
+      if (!contentRef) return;
+
+      const newContent = cloneDeep(content || initialContentData);
+      
+      const fullPath = path ? `/${path.replace(/\./g, '/')}` : '';
+
+      // For direct update on temporary state
+      const tempContent = cloneDeep(content);
+      const set = (obj: any, path: string, value: any) => {
+        const keys = path.split('.');
+        let current = obj;
+        for (let i = 0; i < keys.length - 1; i++) {
+          current = current[keys[i]];
+        }
+        current[keys[keys.length - 1]] = value;
+      }
+      if(path) set(tempContent, path, value);
+      setContent(tempContent as SiteContent);
+    },
+    [content, contentRef]
+  );
+  
+  const saveChanges = () => {
+    if (!content || !contentRef) return;
+
+    firebaseSet(contentRef, content)
+      .then(() => {
         toast({ title: 'Content saved successfully!' });
-      } catch (error) {
+        setOriginalContent(null);
+      })
+      .catch((error) => {
+        console.error("Failed to save content: ", error);
         toast({ variant: 'destructive', title: 'Failed to save content.' });
-      }
+      });
+  };
+
+  const cancelChanges = () => {
+    if (originalContent) {
+      setContent(originalContent);
+      setOriginalContent(null);
+    }
+  }
+
+  const exitEditMode = (save: boolean) => {
+    if (save) {
+      saveChanges();
     } else {
-       if (originalContent) {
-        setContent(originalContent);
-      }
+      cancelChanges();
     }
     setEditingSection(null);
   };
 
-  const handleContentChange = (path: string, value: any) => {
-    if (!content) return;
-     if (!originalContent) {
-      setOriginalContent(cloneDeep(content));
-    }
-    const newContent = cloneDeep(content);
-    set(newContent, path, value);
-    setContent(newContent);
-  };
-  
+  const enterSectionEditing = (section: string) => {
+    if (!isEditMode) return;
+    setOriginalContent(cloneDeep(content));
+    setEditingSection(section);
+  }
+
   return (
-    <SiteContentContext.Provider value={{ content, isEditMode, editingSection, enterEditMode, exitEditMode, logout, handleContentChange, setEditingSection }}>
+    <SiteContentContext.Provider value={{ content, isEditMode, editingSection, enterEditMode, exitEditMode, logout, handleContentChange, setEditingSection: enterSectionEditing }}>
       {children}
     </SiteContentContext.Provider>
   );

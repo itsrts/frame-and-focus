@@ -20,7 +20,7 @@ function getFirebaseConfig() {
   
     // All config values are required for initialization
     if (Object.values(firebaseConfig).some(value => !value)) {
-        console.error("One or more Firebase environment variables are missing.");
+        console.log("One or more Firebase environment variables are missing.");
         return null;
     }
   
