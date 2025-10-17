@@ -78,7 +78,7 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
     setIsEditMode(false);
     setEditingSection(null);
     if(originalContent) {
-      handleContentChange('', originalContent); // Revert all changes on logout
+      setContent(originalContent);
     }
     toast({ title: "You've been logged out." });
   }
@@ -91,7 +91,6 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
       if (path) {
         set(newContent, path, value);
       } else {
-        // If path is empty, replace the whole content
         Object.assign(newContent, value);
       }
       setContent(newContent);
