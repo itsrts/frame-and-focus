@@ -32,7 +32,7 @@ export default function RootLayout({
         )}
       >
         <FirebaseProvider>
-          <SiteContentProvider>
+          <SiteContentProvider contentPath="landing-page">
             {children}
             <Toaster />
             <EditControls />

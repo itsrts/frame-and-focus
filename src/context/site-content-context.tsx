@@ -23,9 +23,7 @@ interface SiteContentContextType {
 
 const SiteContentContext = createContext<SiteContentContextType | undefined>(undefined);
 
-const CONTENT_PATH = 'landing-page';
-
-export const SiteContentProvider = ({ children, contentPath = CONTENT_PATH }: { children: ReactNode, contentPath?: string }) => {
+export const SiteContentProvider = ({ children, contentPath }: { children: ReactNode, contentPath: string }) => {
   const { readData, writeData, dbConnection } = useDatabase();
   const [content, setContent] = useState<SiteContent | null>(null);
   const [originalContent, setOriginalContent] = useState<SiteContent | null>(null);
@@ -41,7 +39,7 @@ export const SiteContentProvider = ({ children, contentPath = CONTENT_PATH }: { 
   }, []);
 
   useEffect(() => {
-    if (dbConnection === 'connected') {
+    if (dbConnection === 'connected' && contentPath) {
       const unsubscribe = readData(contentPath, (data) => {
         if (data) {
           setContent(data);
