@@ -44,7 +44,9 @@ export default function Footer() {
           setPassword('');
         }
         // Unsubscribe after checking the password
-        unsubscribe();
+        if (typeof unsubscribe === 'function') {
+          unsubscribe();
+        }
       });
     }
   };

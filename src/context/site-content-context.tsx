@@ -8,7 +8,7 @@ import cloneDeep from 'lodash.clonedeep';
 import set from 'lodash.set';
 import { useDatabase } from './database-provider';
 
-type SiteContent = typeof initialContentData['landing-page'];
+type SiteContent = typeof initialContentData;
 
 interface SiteContentContextType {
   content: SiteContent | null;
@@ -25,7 +25,7 @@ const SiteContentContext = createContext<SiteContentContextType | undefined>(und
 
 const CONTENT_PATH = 'landing-page';
 
-export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
+export const SiteContentProvider = ({ children, contentPath = CONTENT_PATH }: { children: ReactNode, contentPath?: string }) => {
   const { readData, writeData, dbConnection } = useDatabase();
   const [content, setContent] = useState<SiteContent | null>(null);
   const [originalContent, setOriginalContent] = useState<SiteContent | null>(null);
@@ -42,14 +42,14 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (dbConnection === 'connected') {
-      const unsubscribe = readData(CONTENT_PATH, (data) => {
+      const unsubscribe = readData(contentPath, (data) => {
         if (data) {
           setContent(data);
         } else {
           // If no data in DB, seed it with initial content
-          writeData(CONTENT_PATH, initialContentData[CONTENT_PATH])
+          writeData(contentPath, initialContentData)
             .then(() => {
-              setContent(initialContentData[CONTENT_PATH]);
+              setContent(initialContentData);
               toast({ title: 'Database seeded with initial content.' });
             })
             .catch(error => {
@@ -58,9 +58,13 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
             });
         }
       });
-      return () => unsubscribe();
+      return () => {
+        if (typeof unsubscribe === 'function') {
+          unsubscribe();
+        }
+      };
     }
-  }, [dbConnection, readData, writeData, toast]);
+  }, [dbConnection, readData, writeData, toast, contentPath]);
 
   const enterEditMode = () => {
     sessionStorage.setItem('ulta-admin-authenticated', 'true');
@@ -88,7 +92,7 @@ export const SiteContentProvider = ({ children }: { children: ReactNode }) => {
   
   const saveChanges = () => {
     if (!content) return;
-    writeData(CONTENT_PATH, content)
+    writeData(contentPath, content)
       .then(() => {
         toast({ title: 'Content saved successfully!' });
         setOriginalContent(null);

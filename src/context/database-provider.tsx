@@ -10,7 +10,7 @@ const APP_ID = 'app-id-tuc';
 
 interface DatabaseContextType {
   dbConnection: 'connecting' | 'connected' | 'error';
-  readData: (path: string, callback: (data: any) => void) => Unsubscribe;
+  readData: (path: string, callback: (data: any) => void) => Unsubscribe | void;
   writeData: (path: string, data: any) => Promise<void>;
   updateData: (path: string, data: any) => Promise<void>;
   deleteData: (path: string) => Promise<void>;
@@ -24,7 +24,7 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
 
   const getPath = useCallback((path: string) => `${APP_ID}/${path}`, []);
 
-  const readData = useCallback((path: string, callback: (data: any) => void): Unsubscribe => {
+  const readData = useCallback((path: string, callback: (data: any) => void): Unsubscribe | void => {
     if (!database) {
         toast({ variant: "destructive", title: "Database not connected." });
         return () => {};
@@ -71,8 +71,7 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
     if (dbConnection === 'connected' && database) {
         const adminRef = ref(database, getPath('admin-password'));
         onValue(adminRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data === null) { // Check if data is null, meaning it doesn't exist
+            if (!snapshot.exists()) { 
                 console.log("Seeding admin password...");
                 set(adminRef, 'your_secure_password')
                     .then(() => {
