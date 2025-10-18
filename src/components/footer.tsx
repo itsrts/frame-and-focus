@@ -31,9 +31,12 @@ export default function Footer() {
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password) {
-      // The readData function sets up a listener, we need to unsubscribe
-      // after we get the value to avoid memory leaks.
       const unsubscribe = readData('admin-password', (dbPassword) => {
+        // We need to wait for a non-null value from the database.
+        if (dbPassword === null) {
+          return; // Still loading, wait for the actual value.
+        }
+
         if (password === dbPassword) {
           enterEditMode();
           toast({ title: 'Edit mode enabled.' });
@@ -43,7 +46,8 @@ export default function Footer() {
           toast({ variant: 'destructive', title: 'Invalid password.' });
           setPassword('');
         }
-        // Unsubscribe after checking the password
+
+        // Once we have a non-null value and have checked it, we can unsubscribe.
         if (typeof unsubscribe === 'function') {
           unsubscribe();
         }
