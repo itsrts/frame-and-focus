@@ -5,121 +5,35 @@ import Logo from './logo';
 import { useSiteContent } from '@/context/site-content-context';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogTrigger,
-  DialogClose,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from './ui/label';
-import { useState } from 'react';
-import { useDatabase } from '@/context/database-provider';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const { isEditMode, enterEditMode, logout } = useSiteContent();
-  const { readData } = useDatabase();
   const { toast } = useToast();
-  const [password, setPassword] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
 
-  const handlePasswordSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password) {
-      const unsubscribe = readData('admin-password', (dbPassword) => {
-        // We need to wait for a non-null value from the database.
-        if (dbPassword === null) {
-          return; // Still loading, wait for the actual value.
-        }
-
-        if (password === dbPassword) {
-          enterEditMode();
-          toast({ title: 'Edit mode enabled.' });
-          setIsOpen(false);
-          setPassword('');
-        } else {
-          toast({ variant: 'destructive', title: 'Invalid password.' });
-          setPassword('');
-        }
-
-        // Once we have a non-null value and have checked it, we can unsubscribe.
-        if (typeof unsubscribe === 'function') {
-          unsubscribe();
-        }
-      });
+  const handleAuthClick = () => {
+    if (isEditMode) {
+      logout();
+      toast({ title: "You've been logged out." });
+    } else {
+      enterEditMode();
+      toast({ title: 'Edit mode enabled.' });
     }
   };
 
-  const handleLogout = () => {
-    logout();
-  }
-
   const AuthButton = () => {
-    if(isEditMode) {
-      return (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-muted-foreground hover:text-primary"
-          aria-label="Disable Edit Mode"
-          onClick={handleLogout}
-        >
-          <LogOut className="h-5 w-5" />
-        </Button>
-      )
-    }
-
     return (
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-muted-foreground hover:text-primary"
-            aria-label="Enable Edit Mode"
-          >
-            <Pencil className="h-5 w-5" />
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <form onSubmit={handlePasswordSubmit}>
-            <DialogHeader>
-              <DialogTitle>Admin Authentication</DialogTitle>
-              <DialogDescription>
-                Enter the admin password to enable edit mode.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="password" className="text-right">
-                  Password
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  className="col-span-3"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoFocus
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                  <Button type="button" variant="secondary">Cancel</Button>
-              </DialogClose>
-              <Button type="submit">Enable Editing</Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
-    )
-  }
+      <Button
+        variant="ghost"
+        size="icon"
+        className="text-muted-foreground hover:text-primary"
+        aria-label={isEditMode ? 'Disable Edit Mode' : 'Enable Edit Mode'}
+        onClick={handleAuthClick}
+      >
+        {isEditMode ? <LogOut className="h-5 w-5" /> : <Pencil className="h-5 w-5" />}
+      </Button>
+    );
+  };
 
   return (
     <footer className="bg-background border-t py-4">

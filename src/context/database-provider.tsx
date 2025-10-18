@@ -86,27 +86,6 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
     await remove(dataRef);
   }, [database, toast, getPath]);
 
-  useEffect(() => {
-    if (dbConnection === 'connected' && database && APP_ID) {
-        const adminRef = ref(database, getPath('admin-password'));
-        onValue(adminRef, (snapshot) => {
-            if (!snapshot.exists()) { 
-                console.log("Seeding admin password...");
-                set(adminRef, 'your_secure_password')
-                    .then(() => {
-                        toast({ title: 'Admin password seeded in database.' });
-                    })
-                    .catch(error => {
-                        console.error('Failed to seed admin password', error);
-                        toast({ variant: 'destructive', title: 'Failed to seed password.'})
-                    });
-            }
-        }, {
-            onlyOnce: true
-        });
-    }
-  }, [dbConnection, database, getPath, toast]);
-
   return (
     <DatabaseContext.Provider value={{ dbConnection, readData, writeData, updateData, deleteData }}>
       {children}
