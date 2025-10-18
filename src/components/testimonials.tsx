@@ -8,7 +8,7 @@ import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 
-function Rating({ count, editable, onChange, 'data-testid': dataTestId }: { count: number; editable?: boolean; onChange?: (value: number) => void, 'data-testid'?: string }) {
+function Rating({ count, editable, onChange, 'data-testid': dataTestId }: { count: number; editable?: boolean; onChange?: (value: number) => void; 'data-testid'?: string }) {
   if (editable && onChange) {
     return (
         <div className="flex items-center gap-2">
@@ -47,8 +47,7 @@ export default function Testimonials() {
 
   const { testimonials } = content;
   const isCurrentlyEditing = isEditMode && editingSection === 'testimonials';
-  const duplicatedTestimonials = [...(testimonials.reviews || []), ...(testimonials.reviews || [])];
-
+  
   const handleAddReview = () => {
     const newReview = {
       quote: "A new amazing review!",
@@ -64,6 +63,10 @@ export default function Testimonials() {
     newReviews.splice(index, 1);
     handleContentChange('testimonials.reviews', newReviews);
   };
+
+  const reviews = testimonials.reviews || [];
+  const duplicatedTestimonials = [...reviews, ...reviews];
+  const animationDuration = reviews.length * 5 + 's';
 
   return (
     <motion.section 
@@ -114,8 +117,8 @@ export default function Testimonials() {
         </div>
         <div className="relative w-full overflow-hidden">
           <motion.div 
-            className="flex w-max hover:[animation-play-state:paused]"
-            style={{ animation: `marquee ${testimonials.reviews.length * 5}s linear infinite`}}
+            className="flex w-max animate-marquee hover:[animation-play-state:paused]"
+            style={{ '--marquee-duration': animationDuration } as React.CSSProperties}
           >
             {duplicatedTestimonials.map((testimonial, index) => (
               <div key={index} className="w-[300px] md:w-[350px] mx-4 flex-shrink-0">
