@@ -28,7 +28,7 @@ export default function Services() {
   return (
     <section id="services" className="relative py-16 md:py-32 bg-secondary">
        {isEditMode && (
-        <div className="absolute top-4 right-4 z-20">
+        <div className="absolute bottom-4 right-4 z-20">
           <Button
             size="sm"
             onClick={() => setEditingSection(isCurrentlyEditing ? null : 'services')}
@@ -79,7 +79,7 @@ export default function Services() {
                           <Input 
                             value={service.icon}
                             onChange={(e) => handleContentChange(`services.list.${index}.icon`, e.target.value)}
-                            className="bg-transparent border-dashed text-center text-xs w-20"
+                            className="bg-transparent border-dashed text-center text-xs w-20 mx-auto"
                             placeholder="Icon"
                           />
                        </div>

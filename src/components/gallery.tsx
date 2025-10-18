@@ -41,7 +41,7 @@ export default function Gallery() {
   return (
     <section id="gallery" className="py-16 md:py-32 relative">
        {isEditMode && (
-        <div className="absolute top-4 right-4 z-20">
+        <div className="absolute bottom-4 right-4 z-20">
           <Button
             size="sm"
             onClick={() => setEditingSection(isCurrentlyEditing ? null : 'gallery')}
@@ -134,4 +134,3 @@ export default function Gallery() {
     </section>
   );
 }
-

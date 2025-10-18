@@ -41,7 +41,7 @@ export default function About() {
   return (
     <section id="about" className="relative py-16 md:py-32 bg-secondary">
        {isEditMode && (
-        <div className="absolute top-4 right-4 z-20">
+        <div className="absolute bottom-4 right-4 z-20">
           <Button
             size="sm"
             onClick={() => setEditingSection(isCurrentlyEditing ? null : 'about')}

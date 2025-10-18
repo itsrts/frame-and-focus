@@ -124,7 +124,7 @@ export default function Hero() {
       </motion.div>
       
       {isEditMode && (
-        <div className="absolute top-4 right-4 z-20 flex gap-2">
+        <div className="absolute bottom-4 right-4 z-20 flex gap-2">
            <Button
             size="sm"
             onClick={() => setEditingSection(isCurrentlyEditing ? null : 'hero')}
