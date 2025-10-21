@@ -1,4 +1,5 @@
 
+
 export const siteContent = {
   hero: {
     heading: 'Your One-Stop Destination for Weddings, Pre-Weddings & More in India',
@@ -127,3 +128,44 @@ export const siteContent = {
     }
   }
 };
+
+export const servicePageContent = {
+  hero: {
+    heading: 'Elegant Wedding Accessories',
+    subheading: 'Discover our curated collection of beautiful accessories to make your special day unforgettable.',
+    backgroundImage: 'https://res.cloudinary.com/the-ulta-camera/image/upload/v1721666873/tuc-4_l2vov6.png',
+  },
+  products: {
+    heading: 'Our Products',
+    subheading: 'Browse through our hand-picked selection of wedding accessories.',
+    items: [
+      {
+        name: 'Elegant Hair Comb',
+        description: 'A beautiful hair comb with crystals and pearls.',
+        image: 'https://res.cloudinary.com/the-ulta-camera/image/upload/v1721666873/tuc-5_tq6iwh.png',
+        imageHint: 'wedding hair comb'
+      },
+      {
+        name: 'Groom\'s Boutonnière',
+        description: 'A classic boutonnière for the groom.',
+        image: 'https://res.cloudinary.com/the-ulta-camera/image/upload/v1721666873/tuc-6_yqjtzj.png',
+        imageHint: 'groom boutonniere'
+      },
+      {
+        name: 'Bridal Veil',
+        description: 'A stunning cathedral length bridal veil.',
+        image: 'https://res.cloudinary.com/the-ulta-camera/image/upload/v1721666873/tuc-7_n5a5nw.png',
+        imageHint: 'bridal veil'
+      },
+      {
+        name: 'Custom Ring Box',
+        description: 'A personalized wooden box to hold your rings.',
+        image: 'https://res.cloudinary.com/the-ulta-camera/image/upload/v1721666873/tuc-8_e8p9jq.png',
+        imageHint: 'wedding ring box'
+      },
+    ]
+  }
+};
+
+export type SiteContent = typeof siteContent;
+export type ServicePageContent = typeof servicePageContent;

@@ -2,16 +2,16 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { siteContent as initialContentData } from '@/app/lib/content';
+import { siteContent as initialContentData, servicePageContent as initialServiceContentData, SiteContent, ServicePageContent } from '@/app/lib/content';
 import { useToast } from '@/hooks/use-toast';
 import cloneDeep from 'lodash.clonedeep';
 import set from 'lodash.set';
 import { useDatabase } from './database-provider';
 
-type SiteContent = typeof initialContentData;
+type ContentType = SiteContent | ServicePageContent | null;
 
 interface SiteContentContextType {
-  content: SiteContent | null;
+  content: ContentType;
   isEditMode: boolean;
   editingSection: string | null;
   enterEditMode: () => void;
@@ -25,11 +25,18 @@ const SiteContentContext = createContext<SiteContentContextType | undefined>(und
 
 export const SiteContentProvider = ({ children, contentPath }: { children: ReactNode, contentPath: string }) => {
   const { readData, writeData, dbConnection } = useDatabase();
-  const [content, setContent] = useState<SiteContent | null>(null);
-  const [originalContent, setOriginalContent] = useState<SiteContent | null>(null);
+  const [content, setContent] = useState<ContentType>(null);
+  const [originalContent, setOriginalContent] = useState<ContentType>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingSection, setEditingSection] = useState<string | null>(null);
   const { toast } = useToast();
+
+  const getInitialContent = (path: string) => {
+    if (path.startsWith('service-')) {
+      return initialServiceContentData;
+    }
+    return initialContentData;
+  }
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -47,9 +54,10 @@ export const SiteContentProvider = ({ children, contentPath }: { children: React
           setContent(data);
         } else {
           // If no data in DB, seed it with initial content
-          writeData(contentPath, initialContentData)
+          const initialContent = getInitialContent(contentPath);
+          writeData(contentPath, initialContent)
             .then(() => {
-              setContent(initialContentData);
+              setContent(initialContent);
               toast({ title: 'Database seeded with initial content.' });
             })
             .catch(error => {
