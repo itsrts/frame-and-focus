@@ -128,14 +128,23 @@ export default function Services() {
                 </CardContent>
                 <CardFooter>
                    {isCurrentlyEditing ? (
-                      <Input
-                        value={service.cta}
-                        onChange={(e) => handleContentChange(`services.list.${index}.cta`, e.target.value)}
-                        className="w-full bg-transparent border-dashed text-center"
-                      />
+                      <div className='flex flex-col gap-2 w-full'>
+                        <Input
+                          value={service.cta}
+                          onChange={(e) => handleContentChange(`services.list.${index}.cta`, e.target.value)}
+                          className="w-full bg-transparent border-dashed text-center"
+                          placeholder='CTA Text'
+                        />
+                        <Input
+                          value={service.ctaLink}
+                          onChange={(e) => handleContentChange(`services.list.${index}.ctaLink`, e.target.value)}
+                          className="w-full bg-transparent border-dashed text-center text-xs"
+                          placeholder='CTA Link (e.g. /service/slug or #booking)'
+                        />
+                      </div>
                    ) : (
                     <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <a href="#booking">{service.cta}</a>
+                        <a href={service.ctaLink}>{service.cta}</a>
                     </Button>
                    )}
                 </CardFooter>

@@ -41,6 +41,7 @@ export const siteContent = {
           'Event Photography: Corporate or private events captured with precision and style.'
         ],
         cta: 'Book Your Photographer',
+        ctaLink: '#booking',
       },
       {
         icon: 'Mail',
@@ -52,6 +53,7 @@ export const siteContent = {
           'Custom Themes: Match your wedding vibe perfectly.'
         ],
         cta: 'Design Your Invitation',
+        ctaLink: '#booking',
       },
       {
         icon: 'Gift',
@@ -63,6 +65,7 @@ export const siteContent = {
           'Eco-Friendly Options: Sustainable and stylish gifting solutions.'
         ],
         cta: 'Order Your Gift Hampers',
+        ctaLink: '#booking',
       },
       {
         icon: 'Gem',
@@ -74,6 +77,7 @@ export const siteContent = {
           'Event Essentials: Coordinated accessories to enhance every function.'
         ],
         cta: 'Shop Wedding Accessories',
+        ctaLink: '/service/wedding-accessories',
       },
       {
         icon: 'Users',
@@ -85,6 +89,7 @@ export const siteContent = {
           'Destination Weddings: Plan, organize, and execute weddings anywhere in India.'
         ],
         cta: 'Plan Your Wedding With Us',
+        ctaLink: '#booking',
       }
     ]
   },
