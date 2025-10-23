@@ -137,7 +137,7 @@ export default function Services() {
                           placeholder='CTA Text'
                         />
                         <Input
-                          value={service.ctaLink}
+                          value={service.ctaLink || ''}
                           onChange={(e) => handleContentChange(`services.list.${index}.ctaLink`, e.target.value)}
                           className="w-full bg-transparent border-dashed text-center text-xs"
                           placeholder='CTA Link (e.g. /service/slug or #booking)'
@@ -145,10 +145,10 @@ export default function Services() {
                       </div>
                    ) : (
                     <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        {service.ctaLink.startsWith('/') ? (
-                          <Link href={service.ctaLink}>{service.cta}</Link>
+                        {(service.ctaLink || '#booking').startsWith('/') ? (
+                          <Link href={service.ctaLink || '#booking'}>{service.cta}</Link>
                         ) : (
-                          <a href={service.ctaLink}>{service.cta}</a>
+                          <a href={service.ctaLink || '#booking'}>{service.cta}</a>
                         )}
                     </Button>
                    )}
@@ -161,4 +161,3 @@ export default function Services() {
     </section>
   );
 }
-
