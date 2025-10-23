@@ -9,6 +9,7 @@ import { useSiteContent } from '@/context/site-content-context';
 import { Pencil, X } from 'lucide-react';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
+import Link from 'next/link';
 
 // Helper to get icon component from string
 const getIcon = (name: string) => {
@@ -144,7 +145,11 @@ export default function Services() {
                       </div>
                    ) : (
                     <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <a href={service.ctaLink}>{service.cta}</a>
+                        {service.ctaLink.startsWith('/') ? (
+                          <Link href={service.ctaLink}>{service.cta}</Link>
+                        ) : (
+                          <a href={service.ctaLink}>{service.cta}</a>
+                        )}
                     </Button>
                    )}
                 </CardFooter>
@@ -156,3 +161,4 @@ export default function Services() {
     </section>
   );
 }
+
