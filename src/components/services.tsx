@@ -137,10 +137,10 @@ export default function Services() {
                           placeholder='CTA Text'
                         />
                         <Input
-                          value={service.ctaLink || ''}
+                          value={service.ctaLink || '#booking'}
                           onChange={(e) => handleContentChange(`services.list.${index}.ctaLink`, e.target.value)}
-                          className="w-full bg-transparent border-dashed text-center text-xs"
-                          placeholder='CTA Link (e.g. /service/slug or #booking)'
+                          className="w-full bg-transparent border-dashed text-center text-sm"
+                          placeholder='e.g. /service/slug or #booking'
                         />
                       </div>
                    ) : (
