@@ -21,7 +21,6 @@ function getFirebaseConfig() {
   
     // All config values are required for initialization
     if (Object.values(firebaseConfig).some(value => !value)) {
-        // This log is for debugging and won't block initialization.
         // Firebase's initializeApp will throw a more specific error if config is truly invalid.
     }
   
