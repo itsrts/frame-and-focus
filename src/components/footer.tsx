@@ -67,7 +67,7 @@ export default function Footer() {
             >
               <Twitter className="h-6 w-6" />
             </a>
-            <AuthButton />
+            {/* <AuthButton /> */}
           </div>
         </div>
       </div>
