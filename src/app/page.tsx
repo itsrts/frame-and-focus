@@ -11,15 +11,16 @@ import Booking from '@/components/booking';
 import Footer from '@/components/footer';
 import Loader from '@/components/loader';
 import { useSiteContent } from '@/context/site-content-context';
-import { useFirebase } from '@/context/firebase-provider';
+// import { useFirebase } from '@/context/firebase-provider';
 
 export default function Home() {
   const [appReady, setAppReady] = useState(false);
   const { content } = useSiteContent();
-  const { dbConnection } = useFirebase();
+  // const { dbConnection } = useFirebase();
 
   useEffect(() => {
-    if (content && dbConnection === 'connected') {
+    // if (content && dbConnection === 'connected') {
+    if (content) {
       const timer = setTimeout(() => {
         setAppReady(true);
         document.body.style.cursor = 'auto';
@@ -30,9 +31,11 @@ export default function Home() {
         clearTimeout(timer);
       };
     }
-  }, [content, dbConnection]);
+  // }, [content, dbConnection]);
+  }, [content]);
   
-  const isLoading = !appReady || !content || dbConnection !== 'connected';
+  // const isLoading = !appReady || !content || dbConnection !== 'connected';
+  const isLoading = !appReady || !content;
 
   return (
     <>

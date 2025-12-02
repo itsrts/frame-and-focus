@@ -6,7 +6,7 @@ import { siteContent as initialContentData, servicePageContent as initialService
 import { useToast } from '@/hooks/use-toast';
 import cloneDeep from 'lodash.clonedeep';
 import set from 'lodash.set';
-import { useDatabase } from './database-provider';
+// import { useDatabase } from './database-provider';
 
 type ContentType = SiteContent | ServicePageContent | null;
 
@@ -24,7 +24,7 @@ interface SiteContentContextType {
 const SiteContentContext = createContext<SiteContentContextType | undefined>(undefined);
 
 export const SiteContentProvider = ({ children, contentPath }: { children: ReactNode, contentPath: string }) => {
-  const { readData, writeData, dbConnection } = useDatabase();
+  // const { readData, writeData, dbConnection } = useDatabase();
   const [content, setContent] = useState<ContentType>(null);
   const [originalContent, setOriginalContent] = useState<ContentType>(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -48,31 +48,36 @@ export const SiteContentProvider = ({ children, contentPath }: { children: React
   }, []);
 
   useEffect(() => {
-    if (dbConnection === 'connected' && contentPath) {
-      const unsubscribe = readData(contentPath, (data) => {
-        if (data) {
-          setContent(data);
-        } else {
-          // If no data in DB, seed it with initial content
-          const initialContent = getInitialContent(contentPath);
-          writeData(contentPath, initialContent)
-            .then(() => {
-              setContent(initialContent);
-              toast({ title: 'Database seeded with initial content.' });
-            })
-            .catch(error => {
-              console.error("Failed to seed database: ", error);
-              toast({ variant: 'destructive', title: 'Failed to seed database.' });
-            });
-        }
-      });
-      return () => {
-        if (typeof unsubscribe === 'function') {
-          unsubscribe();
-        }
-      };
-    }
-  }, [dbConnection, readData, writeData, toast, contentPath]);
+    // When Firebase is disabled, just use the hardcoded content.
+    setContent(getInitialContent(contentPath));
+
+    // if (dbConnection === 'connected' && contentPath) {
+    //   const unsubscribe = readData(contentPath, (data) => {
+    //     if (data) {
+    //       setContent(data);
+    //     } else {
+    //       // If no data in DB, seed it with initial content
+    //       const initialContent = getInitialContent(contentPath);
+    //       writeData(contentPath, initialContent)
+    //         .then(() => {
+    //           setContent(initialContent);
+    //           toast({ title: 'Database seeded with initial content.' });
+    //         })
+    //         .catch(error => {
+    //           console.error("Failed to seed database: ", error);
+    //           toast({ variant: 'destructive', title: 'Failed to seed database.' });
+    //         });
+    //     }
+    //   });
+    //   return () => {
+    //     if (typeof unsubscribe === 'function') {
+    //       unsubscribe();
+    //     }
+    //   };
+    // }
+  // }, [dbConnection, readData, writeData, toast, contentPath]);
+  }, [contentPath]);
+
 
   const enterEditMode = () => {
     sessionStorage.setItem('ulta-admin-authenticated', 'true');
@@ -100,15 +105,18 @@ export const SiteContentProvider = ({ children, contentPath }: { children: React
   
   const saveChanges = () => {
     if (!content) return;
-    writeData(contentPath, content)
-      .then(() => {
-        toast({ title: 'Content saved successfully!' });
-        setOriginalContent(null);
-      })
-      .catch((error) => {
-        console.error("Failed to save content: ", error);
-        toast({ variant: 'destructive', title: 'Failed to save content.' });
-      });
+    // writeData(contentPath, content)
+    //   .then(() => {
+    //     toast({ title: 'Content saved successfully!' });
+    //     setOriginalContent(null);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Failed to save content: ", error);
+    //     toast({ variant: 'destructive', title: 'Failed to save content.' });
+    //   });
+    console.log("Firebase is disabled. Changes are not saved.");
+    toast({ title: 'Firebase is disabled. Changes cannot be saved.'});
+    setOriginalContent(null);
   };
 
   const cancelChanges = () => {
